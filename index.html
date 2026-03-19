@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Catch The Google</title>
+  </head>
+  <body>
+    <main>
+      <section class="container">
+        <div class="top-items">
+          <div class="line">
+            <label for="01">Grid size</label>
+            <select name="select" id="01">
+              <option value="1">4x4</option>
+              <option value="1">5x5</option>
+              <option value="1">7x7</option>
+              <option value="1">8x8</option>
+            </select>
+          </div>
+          <div class="line">
+            <label for="02">Points to win</label>
+            <select name="select" id="02">
+              <option value="1">4x4</option>
+              <option value="1">5x5</option>
+              <option value="1">7x7</option>
+              <option value="1">8x8</option>
+            </select>
+          </div>
+          <div class="line">
+            <label for="03">Points to lose</label>
+            <select name="select" id="03">
+              <option value="1">4x4</option>
+              <option value="1">5x5</option>
+              <option value="1">7x7</option>
+              <option value="1">8x8</option>
+            </select>
+          </div>
+          <div class="switch-button">
+            <label>Sound on</label>
+            <button class="toggle" onclick="toggleSound()">
+              <span class="icon-slider"></span>
+            </button>
+          </div>
+        </div>
+        <div class="main-elements">
+          <button class="button main-button">START GAME</button>
+          <div class="result-container">
+            <div class="result-block">
+              <span class="result-title">Catch:</span>
+              <span class="result">0</span>
+            </div>
+            <div class="result-block">
+              <span class="result-title">Miss:</span>
+              <span class="result">0</span>
+            </div>
+          </div>
+          <!--            <table>: Это основной тег для создания таблицы.-->
+          <!--            <tr>: Этот тег представляет строку в таблице. -->
+          <!--            <td>: Этот тег представляет ячейку в таблице.-->
+          <table class="table">
+            <tbody>
+              <tr>
+                <td class="cell"><img src="img/icons/googleIcon.svg" alt="googleIcon" /></td>
+                <td class="cell"><img src="img/icons/man01.svg" alt="man" /></td>
+                <td class="cell"><img src="img/icons/man02.svg" alt="man" /></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+              </tr>
+              <tr>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+              </tr>
+              <tr>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+              </tr>
+              <tr>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+              </tr>
+              <tr>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="modal">
+            <div class="modal-decoration"><img src="img/icons/winnerIcon.svg" alt="icon" /></div>
+            <div class="modal-elements">
+              <div class="title-modal">You Win!</div>
+              <div class="text-modal">Congratulations</div>
+              <div class="modal-result">
+                <div class="result-block">
+                  <span class="result-title">Catch:</span>
+                  <span class="result">20</span>
+                </div>
+                <div class="result-block">
+                  <span class="result-title">Miss:</span>
+                  <span class="result">4</span>
+                </div>
+              </div>
+              <button class="button">Play again</button>
+            </div>
+          </div>
+          <div class="modal">
+            <div class="modal-decoration"><img src="img/icons/lossIcon.svg" alt="icon" /></div>
+            <div class="modal-elements">
+              <div class="title-modal">You Lose!</div>
+              <div class="text-modal">You'll be lucky next time</div>
+              <div class="modal-result">
+                <div class="result-block">
+                  <span class="result-title">Catch:</span>
+                  <span class="result">12</span>
+                </div>
+                <div class="result-block">
+                  <span class="result-title">Miss:</span>
+                  <span class="result">10</span>
+                </div>
+              </div>
+              <button class="button">Play again</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="js/script.js"></script>
+  </body>
+</html>
