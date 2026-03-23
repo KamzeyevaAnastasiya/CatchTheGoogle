@@ -1,6 +1,7 @@
 export const GameStatuses = {
-  pending: "pending",
-  in_progress: "in_progress",
-  completed: "completed",
-  paused: "paused",
+    pending: "pending",
+    in_progress: "in_progress",
+    completed: "completed",
+    paused: "paused",
+    stoped: "stoped",
 }

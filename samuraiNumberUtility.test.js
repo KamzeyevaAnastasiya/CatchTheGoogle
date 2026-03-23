@@ -1,7 +1,7 @@
-import { SamuraiNumberUtility } from "./samuraiNumberUtility.js"
+import { GoogleNumberUtility } from "./googleNumberUtility.js"
 
-describe("SamuraiNumberUtility", () => {
-  const utility = new SamuraiNumberUtility()
+describe("GoogleNumberUtility", () => {
+  const utility = new GoogleNumberUtility()
 
   test("return an integer within range", () => {
     const from = 1
