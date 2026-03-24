@@ -145,10 +145,10 @@ export class Game {
         if (delta.x) newPosition.x += delta.x;
         if (delta.y) newPosition.y += delta.y;
 
-        if (newPosition.x < 0 || newPosition.x > this.#settings.gridSize.columnCount) {
+        if (newPosition.x < 1 || newPosition.x > this.#settings.gridSize.columnCount) {
             return true;
         }
-        if (newPosition.y < 0 || newPosition.y > this.#settings.gridSize.rowCount) {
+        if (newPosition.y < 1 || newPosition.y > this.#settings.gridSize.rowCount) {
             return true;
         }
 
