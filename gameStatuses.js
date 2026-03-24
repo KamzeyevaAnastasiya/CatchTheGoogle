@@ -4,4 +4,5 @@ export const GameStatuses = {
     completed: "completed",
     paused: "paused",
     stoped: "stoped",
+    finished: "finished"
 }

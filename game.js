@@ -12,7 +12,7 @@ export class Game {
             rowCount: 4,
         },
         googleJumpInterval: 2000,
-        pointsToWin: 10,
+        pointsToWin: 3,
     }
 
     //состояни игры
@@ -83,6 +83,10 @@ export class Game {
         this.#settings.googleJumpInterval = value
     }
 
+    set score(value) {
+        this.#score = value;
+    }
+
     //генерация несовпадающих позиций
     #getRandomPosition(coordinates) {
         let newX, newY
@@ -119,8 +123,9 @@ export class Game {
 
     // Запуск интервала прыжков Google
     #runGoogleJumpInterval() {
+        if (this.#settings.googleJumpInterval === 0) return;
         this.#googleSetIntervalId = setInterval(() => {
-            this.#moveGoogleToRandomPosition(true);
+            this.#moveGoogleToRandomPosition();
         }, this.#settings.googleJumpInterval);
     }
 
@@ -164,22 +169,34 @@ export class Game {
     }
 
     #checkGoogleCatching(player) {
-        if (player.position.equal(this.#google.position)) {
-            this.#score[player.id].points++;
+        if (!player.position.equal(this.#google.position)) {
+            return;
+        }
+        //если поймали, то увеличиваем счет
+        this.#score[player.id].points += 1;
 
-            this.#moveGoogleToRandomPosition()
-
+        if (this.#score[player.id].points === this.#settings.pointsToWin) {
+            this.#finishGame();
+        } else {
+            this.#moveGoogleToRandomPosition(true);
         }
     }
 
     #movePlayer(movingPlayer, anotherPlayer, delta) {
+        if (this.#status !== GameStatuses.in_progress) return;
+
+        // стоп таймер на время хода
+        clearInterval(this.#googleSetIntervalId);
         const isBorder = this.#checkBorders(movingPlayer, delta);
         const isAnotherPlayer = this.#checkOtherPlayer(
             movingPlayer,
             anotherPlayer,
             delta
         );
-        if (isBorder || isAnotherPlayer) return
+        if (isBorder || isAnotherPlayer) {
+            this.#runGoogleJumpInterval(); //возврат таймера
+            return
+        }
 
         if (delta.x) {
             movingPlayer.position = new Position(
@@ -193,6 +210,7 @@ export class Game {
             );
         }
         this.#checkGoogleCatching(movingPlayer);
+        this.#runGoogleJumpInterval(); //возврат таймера после хода
     }
 
     movePlayer1Right() {
@@ -235,6 +253,10 @@ export class Game {
         this.#movePlayer(this.#player2, this.#player1, delta);
     }
 
+    async #finishGame() {
+        clearInterval(this.#googleSetIntervalId);
+        this.#status = GameStatuses.finished;
+    }
 
 }
 

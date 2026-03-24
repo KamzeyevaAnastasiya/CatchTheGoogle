@@ -1,10 +1,11 @@
 import {Game} from "./game.js"
 import {GameStatuses} from "./gameStatuses.js"
 
+let game;
+
 describe("Game test", () => {
-    let game;
     beforeEach(() => {
-        game = new Game(1);
+        game = new Game();
     });
     afterEach(async () => {
         await game.stop();
@@ -12,20 +13,20 @@ describe("Game test", () => {
     it("should have pending as status after creating", () => {
         expect(game.status).toBe(GameStatuses.pending)
     })
-    it("should have in_progress as status after creating", () => {
-        game.start()
+    it("should have in_progress as status after creating", async () => {
+        await game.start()
         expect(game.status).toBe(GameStatuses.in_progress)
     })
-    it("google should be in the Grid after start", () => {
-        game.start()
+    it("google should be in the Grid after start", async () => {
+        await game.start()
         expect(game.googlePosition.x).toBeLessThan(game.gridSize.columnCount)
-        expect(game.googlePosition.x).toBeGreaterThanOrEqual(0)
+        expect(game.googlePosition.x).toBeGreaterThanOrEqual(1)
         expect(game.googlePosition.y).toBeLessThan(game.gridSize.rowCount)
-        expect(game.googlePosition.y).toBeGreaterThanOrEqual(0)
+        expect(game.googlePosition.y).toBeGreaterThanOrEqual(1)
     })
     it("google should be in the Grid but in new position after jump", async () => {
         game.googleJumpInterval = 10
-        game.start()
+        await game.start()
         const prevGooglePosition = game.googlePosition
         await delay(1000)
         const currentGooglePosition = game.googlePosition
@@ -33,7 +34,6 @@ describe("Game test", () => {
     })
     it("player1, player2 should have unique coordinates", async () => {
         for (let i = 0; i < 10; i++) {
-            game = new Game()
             game.settings = {
                 gridSize: {
                     columnCount: 2,
@@ -56,7 +56,7 @@ describe("Game test", () => {
             expect(
                 !game.player1.position.equal(game.player2.position) &&
                 !game.player1.position.equal(game.google.position) &&
-                !game.player2.position.equal(game.google.position.y),
+                !game.player2.position.equal(game.google.position),
             ).toBe(true)
         }
     })
@@ -153,7 +153,55 @@ describe("Game test", () => {
             expect(game.google.position.equal(prevGooglePosition)).toBe(false);
 
         }
-    });
+    })
+    it('first or second player wins', async () => {
+        // setter
+        game.settings = {
+            gridSize: {
+                columnCount: 3,
+                rowCount: 1,
+            },
+        }
+        game.score = {
+            1: {points: 0},
+            2: {points: 0},
+        }
+
+        await game.start()
+        // p1 p2 g | p1 g p2 | p2 p1 g | p2 g p1 | g p1 p2 | g p2 p1
+        const deltaForPlayer1 = game.google.position.x - game.player1.position.x
+
+        if (Math.abs(deltaForPlayer1) === 2) {
+            const deltaForPlayer2 = game.google.position.x - game.player2.position.x
+            if (deltaForPlayer2 > 0) {
+                game.movePlayer2Right()
+                game.movePlayer2Left()
+                game.movePlayer2Right()
+            } else {
+                game.movePlayer2Left()
+                game.movePlayer2Right()
+                game.movePlayer2Left()
+            }
+
+            expect(game.status).toBe('finished')
+            expect(game.score[1].points).toBe(0)
+            expect(game.score[2].points).toBe(3)
+        } else {
+            if (deltaForPlayer1 > 0) {
+                game.movePlayer1Right()
+                game.movePlayer1Left()
+                game.movePlayer1Right()
+            } else {
+                game.movePlayer1Left()
+                game.movePlayer1Right()
+                game.movePlayer1Left()
+            }
+
+            expect(game.status).toBe('finished')
+            expect(game.score[1].points).toBe(3)
+            expect(game.score[2].points).toBe(0)
+        }
+    })
 
 
 })
