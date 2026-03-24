@@ -12,6 +12,7 @@ export class Game {
             rowCount: 4,
         },
         googleJumpInterval: 2000,
+        pointsToWin: 10,
     }
 
     //состояни игры
@@ -24,7 +25,10 @@ export class Game {
      */
     #numberUtility
     #googleSetIntervalId
-
+    #score = {
+        1: {points: 0},
+        2: {points: 0},
+    };
 
     //утилита для генерации чисел Google
     constructor() {
@@ -33,7 +37,11 @@ export class Game {
 
     //настройки игры
     set settings(settings) {
-        this.#settings = settings
+        this.#settings = {...this.#settings, ...settings};
+
+        this.#settings.gridSize = settings.gridSize
+            ? {...this.#settings.gridSize, ...settings.gridSize}
+            : this.#settings.gridSize;
     }
 
     get settings() {
@@ -64,6 +72,10 @@ export class Game {
         return this.#google
     }
 
+    get score() {
+        return this.#score;
+    }
+
     set googleJumpInterval(value) {
         if (!Number.isInteger(value) || value < 0) {
             throw new Error(`Google Jump Interval must be a positive integer`)
@@ -91,27 +103,15 @@ export class Game {
         const player2Position = this.#getRandomPosition([player1Position])
         this.#player2 = new Player(2, player2Position)
 
-        this.#moveGoogleToRandomPosition(true)
+        this.#moveGoogleToRandomPosition()
     }
 
-    /*    //прыжок гугла
-        #jumpGoogle() {
-            const newPosition = {
-                x: this.#numberUtility.getRandomInt(0, this.#settings.gridSize.columnCount),
-                y: this.#numberUtility.getRandomInt(0, this.#settings.gridSize.rowCount),
-            }
-            if (newPosition.x === this.googlePosition?.x && newPosition.y === this.googlePosition?.y) {
-                this.#jumpGoogle()
-                return
-            }
-            this.#googlePosition = newPosition
-        }*/
 
     #moveGoogleToRandomPosition(excludeGoogle) {
         let notCrossedPosition = [this.#player1.position, this.#player2.position];
 
-        if (!excludeGoogle) {
-            notCrossedPosition.push(this.#google.googlePosition);
+        if (!excludeGoogle && this.#google) {  // НЕ исключаем Google, если excludeGoogle = false
+            notCrossedPosition.push(this.#google.position);
         }
 
         this.#google = new Google(this.#getRandomPosition(notCrossedPosition));
@@ -120,7 +120,7 @@ export class Game {
     // Запуск интервала прыжков Google
     #runGoogleJumpInterval() {
         this.#googleSetIntervalId = setInterval(() => {
-            this.#moveGoogleToRandomPosition();
+            this.#moveGoogleToRandomPosition(true);
         }, this.#settings.googleJumpInterval);
     }
 
@@ -139,4 +139,115 @@ export class Game {
         clearInterval(this.#googleSetIntervalId);
         this.#status = GameStatuses.stoped;
     }
+
+    #checkBorders(player, delta) {
+        const newPosition = player.position.clone();
+        if (delta.x) newPosition.x += delta.x;
+        if (delta.y) newPosition.y += delta.y;
+
+        if (newPosition.x < 0 || newPosition.x > this.#settings.gridSize.columnCount) {
+            return true;
+        }
+        if (newPosition.y < 0 || newPosition.y > this.#settings.gridSize.rowCount) {
+            return true;
+        }
+
+        return false;
+    }
+
+    #checkOtherPlayer(movingPlayer, anotherPlayer, delta) {
+        const newPosition = movingPlayer.position.clone();
+        if (delta.x) newPosition.x += delta.x;
+        if (delta.y) newPosition.y += delta.y;
+
+        return anotherPlayer.position.equal(newPosition);
+    }
+
+    #checkGoogleCatching(player) {
+        if (player.position.equal(this.#google.position)) {
+            this.#score[player.id].points++;
+
+            this.#moveGoogleToRandomPosition()
+
+        }
+    }
+
+    #movePlayer(movingPlayer, anotherPlayer, delta) {
+        const isBorder = this.#checkBorders(movingPlayer, delta);
+        const isAnotherPlayer = this.#checkOtherPlayer(
+            movingPlayer,
+            anotherPlayer,
+            delta
+        );
+        if (isBorder || isAnotherPlayer) return
+
+        if (delta.x) {
+            movingPlayer.position = new Position(
+                movingPlayer.position.x + delta.x,
+                movingPlayer.position.y,
+            );
+        } else {
+            movingPlayer.position = new Position(
+                movingPlayer.position.x,
+                movingPlayer.position.y + delta.y,
+            );
+        }
+        this.#checkGoogleCatching(movingPlayer);
+    }
+
+    movePlayer1Right() {
+        const delta = {x: 1};
+        this.#movePlayer(this.#player1, this.#player2, delta);
+    }
+
+    movePlayer1Left() {
+        const delta = {x: -1};
+        this.#movePlayer(this.#player1, this.#player2, delta);
+    }
+
+    movePlayer1Up() {
+        const delta = {y: -1};
+        this.#movePlayer(this.#player1, this.#player2, delta);
+    }
+
+    movePlayer1Down() {
+        const delta = {y: 1};
+        this.#movePlayer(this.#player1, this.#player2, delta);
+    }
+
+    movePlayer2Right() {
+        const delta = {x: 1};
+        this.#movePlayer(this.#player2, this.#player1, delta);
+    }
+
+    movePlayer2Left() {
+        const delta = {x: -1};
+        this.#movePlayer(this.#player2, this.#player1, delta);
+    }
+
+    movePlayer2Up() {
+        const delta = {y: -1};
+        this.#movePlayer(this.#player2, this.#player1, delta);
+    }
+
+    movePlayer2Down() {
+        const delta = {y: 1};
+        this.#movePlayer(this.#player2, this.#player1, delta);
+    }
+
+
 }
+
+
+/*    //прыжок гугла
+    #jumpGoogle() {
+        const newPosition = {
+            x: this.#numberUtility.getRandomInt(0, this.#settings.gridSize.columnCount),
+            y: this.#numberUtility.getRandomInt(0, this.#settings.gridSize.rowCount),
+        }
+        if (newPosition.x === this.googlePosition?.x && newPosition.y === this.googlePosition?.y) {
+            this.#jumpGoogle()
+            return
+        }
+        this.#googlePosition = newPosition
+    }*/
