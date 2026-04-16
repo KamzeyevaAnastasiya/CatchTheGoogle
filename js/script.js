@@ -1,4 +1,5 @@
-function toggleSound() {
-  let toggleButton = document.querySelector(".toggle")
-  toggleButton.classList.toggle("on")
-}
+import { Controller } from '../controller.js'
+import { View } from '../view.js'
+
+const view = new View()
+const controller = new Controller(view)

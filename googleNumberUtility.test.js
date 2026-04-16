@@ -1,9 +1,9 @@
-import { GoogleNumberUtility } from "./googleNumberUtility.js"
+import { GoogleNumberUtility } from './googleNumberUtility.js'
 
-describe("GoogleNumberUtility", () => {
+describe('GoogleNumberUtility', () => {
   const utility = new GoogleNumberUtility()
 
-  test("return an integer within range", () => {
+  test('return an integer within range', () => {
     const from = 1
     const to = 5
     for (let i = 0; i < 100; i++) {
@@ -14,25 +14,25 @@ describe("GoogleNumberUtility", () => {
     }
   })
 
-  test("thows error if fromInclusive is equal toExclusive", () => {
+  test('thows error if fromInclusive is equal toExclusive', () => {
     const from = 5
     const to = 5
     expect(() => utility.getRandomInt(from, to)).toThrow(Error)
   })
 
-  test("thows error if fromInclusive is greater than toExclusive", () => {
+  test('thows error if fromInclusive is greater than toExclusive', () => {
     const from = 5
     const to = 3
     expect(() => utility.getRandomInt(from, to)).toThrow(Error)
   })
 
-  test("return fromInclusive if toExclusive is just one more than fromInclusive", () => {
+  test('return fromInclusive if toExclusive is just one more than fromInclusive', () => {
     const from = 5
     const to = 6
     expect(utility.getRandomInt(from, to)).toBe(from)
   })
 
-  test("works with large rangee values", () => {
+  test('works with large rangee values', () => {
     const from = 1_000_000
     const to = 2_000_000
     const result = utility.getRandomInt(from, to)
