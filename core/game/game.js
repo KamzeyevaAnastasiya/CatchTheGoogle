@@ -1,7 +1,7 @@
 import { GameStatuses } from './gameStatuses.js'
-import { NumberUtil } from './numberUtil.js'
-import { Position } from './position.js'
-import { Player, Google } from './unit.js'
+import { NumberUtil } from '../utils/numberUtil.js'
+import { Position } from '../position.js'
+import { Player, Google } from '../unit.js'
 
 export class Game {
   //базовые настройки

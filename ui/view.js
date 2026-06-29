@@ -1,5 +1,5 @@
-import {GameStatuses} from './gameStatuses.js'
-import {MoveDirections} from './moveDirections.js'
+import {GameStatuses} from '../core/game/gameStatuses.js'
+import {MoveDirections} from '../core/moveDirections.js'
 
 export class View {
     #callbacks = {}
