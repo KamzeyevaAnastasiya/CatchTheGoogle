@@ -23,7 +23,7 @@ body {
     gap: 10rem;
 }
 
-.settingsGridSize {
+.settingsWrapper {
     position: fixed;
     top: 5%;
     left: 5%;
@@ -31,14 +31,14 @@ body {
     flex-direction: column;
 }
 
-.labelGridSize {
+.label {
     font-weight: 400;
     font-size: 14px;
     color: #b6fde5;
     padding: 6px 0;
 }
 
-.selectGridSize {
+.select {
     border-radius: 5px;
     padding: 6px 12px;
     width: 245px;
@@ -51,7 +51,7 @@ body {
     cursor: pointer;
 }
 
-.selectGridSize:disabled {
+.select:disabled {
     cursor: not-allowed;
 }
 

@@ -71,21 +71,21 @@ export class View {
 
     #settingsGame(dto) {
         const wrapper = document.createElement('div')
-        wrapper.className = 'settingsGame'
+        wrapper.className = 'wrapperSettingsGame'
         wrapper.append(this.#settingsGridSize(dto))
         return wrapper
     }
 
     #settingsGridSize(dto) {
         const wrapper = document.createElement('div')
-        wrapper.className = 'settingsGridSize'
+        wrapper.className = 'settingsWrapper'
 
         const label = document.createElement('label')
         label.textContent = 'Grid size'
-        label.className = 'labelGridSize'
+        label.className = 'label'
 
         const selectGridSize = document.createElement('select')
-        selectGridSize.className = 'selectGridSize'
+        selectGridSize.className = 'select'
 
         if (dto.status !== GameStatuses.pending) {
             selectGridSize.disabled = true
