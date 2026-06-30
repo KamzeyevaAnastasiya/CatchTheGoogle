@@ -23,6 +23,25 @@ body {
     gap: 10rem;
 }
 
+.selectGridSize {
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    border-radius: 5px;
+    padding: 6px 12px;
+    width: 250px;
+    height: 36px;
+    background: #1c222c;
+    opacity: 0.8;
+    font-weight: 400;
+    font-size: 16px;
+    color: #b3b3b3;
+    cursor: pointer;
+}
+
+.selectGridSize:disabled {
+    cursor: not-allowed;
+}
 
 button {
     padding: 15px 40px;

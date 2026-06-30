@@ -46,12 +46,12 @@ export class View {
         rootElement.innerHTML = ''
         scoreElement.innerHTML = ''
 
+        rootElement.append(this.#settingsGridSize(dto))
+
         if (dto.status === GameStatuses.pending) {
-            const startButtonElement = this.#settingsScreen()
-            rootElement.append(startButtonElement)
+            rootElement.append(this.#settingsScreen())
         } else if (dto.status === GameStatuses.in_progress) {
-            const tableElement = this.#gridScreen(dto)
-            rootElement.append(tableElement)
+            rootElement.append(this.#gridScreen(dto))
         }
 
         scoreElement.innerText = `player1: ${dto.score[1].points} // player2: ${dto.score[2].points}`;
@@ -59,7 +59,7 @@ export class View {
 
     #settingsScreen() {
         const startButtonElement = document.createElement('button')
-        startButtonElement.textContent = 'start'
+        startButtonElement.textContent = 'start game'
 
         //subject, publisher; subscribe, on, handle; observer, subscriber, handler
         startButtonElement.addEventListener('click', (e) => {
@@ -68,28 +68,55 @@ export class View {
         return startButtonElement
     }
 
+    #settingsGridSize(dto) {
+        const selectGridSize = document.createElement('select')
+        selectGridSize.className = 'selectGridSize'
+
+        if (dto.status !== GameStatuses.pending) {
+            selectGridSize.disabled = true;
+        }
+
+        dto.gridSizeSettings.forEach(data => {
+            const newOption = new Option(data.text, data.value);
+            selectGridSize.add(newOption);
+        });
+
+        selectGridSize.value = `${dto.gridSize.columnCount}x${dto.gridSize.rowCount}`
+
+        selectGridSize.addEventListener('change', (e) => {
+            const option = dto.gridSizeSettings.find(item => item.value === e.target.value)
+            if (!option) return
+            this.#callbacks.onChangeGridSize(
+                option.columnCount,
+                option.rowCount
+            )
+        })
+
+        return selectGridSize
+    }
+
     #gridScreen(dto) {
         const tableElement = document.createElement('table')
 
-        for (let y = 0; y < dto.rowsCount; y++) {
+        for (let y = 0; y < dto.gridSize.rowCount; y++) {
             const rowElement = document.createElement('tr')
-            for (let x = 0; x < dto.columnsCount; x++) {
+            for (let x = 0; x < dto.gridSize.columnCount; x++) {
                 const cellElement = document.createElement('td')
                 if (dto.googlePosition && x === dto.googlePosition.x && y === dto.googlePosition.y) {
                     const googleElement = document.createElement('img')
-                    googleElement.src = './img/icons/googleIcon.svg'
+                    googleElement.src = '../img/icons/googleIcon.svg'
                     googleElement.alt = 'Google'
                     cellElement.appendChild(googleElement)
                 }
                 if (dto.googlePosition && x === dto.player1Position.x && y === dto.player1Position.y) {
                     const player1 = document.createElement('img')
-                    player1.src = './img/icons/man01.svg'
+                    player1.src = '../img/icons/man01.svg'
                     player1.alt = 'Player1'
                     cellElement.appendChild(player1)
                 }
                 if (dto.player2Position && x === dto.player2Position.x && y === dto.player2Position.y) {
                     const player2 = document.createElement('img')
-                    player2.src = './img/icons/man02.svg'
+                    player2.src = '../img/icons/man02.svg'
                     player2.alt = 'Player2'
                     cellElement.appendChild(player2)
                 }
