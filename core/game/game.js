@@ -32,8 +32,8 @@ export class Game {
 
     //состояни игры
     #status = GameStatuses.pending
-    #player1Position
-    #player2Position
+    #player1
+    #player2
     #google
     #callbackProps = {}
     #googleSetIntervalId
@@ -54,10 +54,6 @@ export class Game {
         this.#settings.gridSize = settings.gridSize
             ? {...this.#settings.gridSize, ...settings.gridSize}
             : this.#settings.gridSize
-    }
-
-    get settings() {
-        return this.#settings
     }
 
     get status() {
@@ -85,11 +81,11 @@ export class Game {
     }
 
     get player1Position() {
-        return this.#player1Position?.position
+        return this.#player1?.position
     }
 
     get player2Position() {
-        return this.#player2Position?.position
+        return this.#player2?.position
     }
 
     get google() {
@@ -126,16 +122,16 @@ export class Game {
     // Создание игроков и Google
     #createUnits() {
         const player1Position = this.#getRandomPosition([])
-        this.#player1Position = new Player(1, player1Position)
+        this.#player1 = new Player(1, player1Position)
 
         const player2Position = this.#getRandomPosition([player1Position])
-        this.#player2Position = new Player(2, player2Position)
+        this.#player2 = new Player(2, player2Position)
 
         this.#moveGoogleToRandomPosition(true)
     }
 
-    #moveGoogleToRandomPosition(excludeGoogle) {
-        let notCrossedPosition = [this.#player1Position.position, this.#player2Position.position]
+    #moveGoogleToRandomPosition() {
+        let notCrossedPosition = [this.#player1.position, this.#player2.position]
 
         if (this.#google) {
             notCrossedPosition.push(this.#google.position)
@@ -155,15 +151,16 @@ export class Game {
     }
 
     //старт игры
-    async start() {
+    start() {
         if (this.#status !== GameStatuses.pending) return
 
         this.#status = GameStatuses.in_progress
         this.#createUnits()
         this.#runGoogleJumpInterval()
+        this.#callbackProps.onChange()
     }
 
-    async stop() {
+    stop() {
         clearInterval(this.#googleSetIntervalId)
         this.#status = GameStatuses.stoped
     }
@@ -245,46 +242,47 @@ export class Game {
 
     movePlayer1Right() {
         const delta = {x: 1}
-        this.movePlayer(this.#player1Position, this.#player2Position, delta)
+        this.movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer1Left() {
         const delta = {x: -1}
-        this.movePlayer(this.#player1Position, this.#player2Position, delta)
+        this.movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer1Up() {
         const delta = {y: -1}
-        this.movePlayer(this.#player1Position, this.#player2Position, delta)
+        this.movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer1Down() {
         const delta = {y: 1}
-        this.movePlayer(this.#player1Position, this.#player2Position, delta)
+        this.movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer2Right() {
         const delta = {x: 1}
-        this.movePlayer(this.#player2Position, this.#player1Position, delta)
+        this.movePlayer(this.#player2, this.#player1, delta)
     }
 
     movePlayer2Left() {
         const delta = {x: -1}
-        this.movePlayer(this.#player2Position, this.#player1Position, delta)
+        this.movePlayer(this.#player2, this.#player1, delta)
     }
 
     movePlayer2Up() {
         const delta = {y: -1}
-        this.movePlayer(this.#player2Position, this.#player1Position, delta)
+        this.movePlayer(this.#player2, this.#player1, delta)
     }
 
     movePlayer2Down() {
         const delta = {y: 1}
-        this.movePlayer(this.#player2Position, this.#player1Position, delta)
+        this.movePlayer(this.#player2, this.#player1, delta)
     }
 
-    async #finishGame() {
+    #finishGame() {
         clearInterval(this.#googleSetIntervalId)
         this.#status = GameStatuses.finished
+        this.#callbackProps.onChange()
     }
 }

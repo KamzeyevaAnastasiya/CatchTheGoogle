@@ -5,6 +5,9 @@ export class View {
     #callbacks = {}
 
     constructor() {
+        this.rootElement = document.getElementById('root')
+        this.scoreElement = document.getElementById('score')
+
         document.addEventListener('keyup', (e) => {
             switch (e.code) {
                 case 'ArrowUp':
@@ -40,21 +43,18 @@ export class View {
     }
 
     render(dto) {
-        const rootElement = document.getElementById('root')
-        const scoreElement = document.querySelector('#score')
+        this.rootElement.innerHTML = ''
+        this.scoreElement.innerHTML = ''
 
-        rootElement.innerHTML = ''
-        scoreElement.innerHTML = ''
-
-        rootElement.append(this.#settingsGame(dto))
+        this.rootElement.append(this.#settingsGame(dto))
 
         if (dto.status === GameStatuses.pending) {
-            rootElement.append(this.#settingsScreen())
+            this.rootElement.append(this.#settingsScreen())
         } else if (dto.status === GameStatuses.in_progress) {
-            rootElement.append(this.#gridScreen(dto))
+            this.rootElement.append(this.#gridScreen(dto))
         }
 
-        scoreElement.innerText = `player1: ${dto.score[1].points} // player2: ${dto.score[2].points}`
+        this.scoreElement.innerText = `player1: ${dto.score[1].points} // player2: ${dto.score[2].points}`
     }
 
     #settingsScreen() {

@@ -1,4 +1,5 @@
 import {Game} from '../core/game/game.js'
+import {MoveDirections} from "../core/moveDirections.js";
 
 export class Controller {
     constructor(view) {
@@ -14,16 +15,16 @@ export class Controller {
             },
             onMove: (playerNumber, direction) => {
                 if (playerNumber === 1) {
-                    if (direction === 'up') this.model.movePlayer1Up()
-                    if (direction === 'down') this.model.movePlayer1Down()
-                    if (direction === 'left') this.model.movePlayer1Left()
-                    if (direction === 'right') this.model.movePlayer1Right()
+                    if (direction === MoveDirections.UP) this.model.movePlayer1Up()
+                    if (direction === MoveDirections.DOWN) this.model.movePlayer1Down()
+                    if (direction === MoveDirections.LEFT) this.model.movePlayer1Left()
+                    if (direction === MoveDirections.RIGHT) this.model.movePlayer1Right()
                 }
                 if (playerNumber === 2) {
-                    if (direction === 'up') this.model.movePlayer2Up()
-                    if (direction === 'down') this.model.movePlayer2Down()
-                    if (direction === 'left') this.model.movePlayer2Left()
-                    if (direction === 'right') this.model.movePlayer2Right()
+                    if (direction === MoveDirections.UP) this.model.movePlayer2Up()
+                    if (direction === MoveDirections.DOWN) this.model.movePlayer2Down()
+                    if (direction === MoveDirections.LEFT) this.model.movePlayer2Left()
+                    if (direction === MoveDirections.RIGHT) this.model.movePlayer2Right()
                 }
             },
             onChangeGridSize: (columnCount, rowCount) => {
