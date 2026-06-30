@@ -23,10 +23,15 @@ body {
     gap: 10rem;
 }
 
-.settingsWrapper {
+.wrapperSettingsGame {
+    display: flex;
+    gap: 12px;
     position: fixed;
     top: 5%;
     left: 5%;
+}
+
+.settingsWrapper {
     display: flex;
     flex-direction: column;
 }

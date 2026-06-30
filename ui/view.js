@@ -73,8 +73,10 @@ export class View {
         const wrapper = document.createElement('div')
         wrapper.className = 'wrapperSettingsGame'
         wrapper.append(this.#settingsGridSize(dto))
+        wrapper.append(this.#settingsPointsToWin(dto))
         return wrapper
     }
+
 
     #settingsGridSize(dto) {
         const wrapper = document.createElement('div')
@@ -105,6 +107,37 @@ export class View {
         })
 
         wrapper.append(label, selectGridSize)
+
+        return wrapper
+    }
+
+    #settingsPointsToWin(dto) {
+        const wrapper = document.createElement('div')
+        wrapper.className = 'settingsWrapper'
+
+        const label = document.createElement('label')
+        label.textContent = 'Points to win'
+        label.className = 'label'
+
+        const selectPointsToWin = document.createElement('select')
+        selectPointsToWin.className = 'select'
+
+        if (dto.status !== GameStatuses.pending) {
+            selectPointsToWin.disabled = true
+        }
+
+        dto.pointsToWinSettings.forEach((data) => {
+            const newOption = new Option(data.text, data.value)
+            selectPointsToWin.add(newOption)
+        })
+
+        selectPointsToWin.addEventListener('change', (e) => {
+            const option = dto.pointsToWinSettings.find((item) => item.value === e.target.value)
+            if (!option) return
+            this.#callbacks.onChangePointsToWin(option.value)
+        })
+
+        wrapper.append(label, selectPointsToWin)
 
         return wrapper
     }
