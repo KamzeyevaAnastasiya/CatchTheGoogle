@@ -23,19 +23,31 @@ body {
     gap: 10rem;
 }
 
-.selectGridSize {
+.settingsGridSize {
     position: fixed;
     top: 5%;
     left: 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+.labelGridSize {
+    font-weight: 400;
+    font-size: 14px;
+    color: #b6fde5;
+    padding: 6px 0;
+}
+
+.selectGridSize {
     border-radius: 5px;
     padding: 6px 12px;
-    width: 250px;
+    width: 245px;
     height: 36px;
     background: #1c222c;
     opacity: 0.8;
     font-weight: 400;
     font-size: 16px;
-    color: #b3b3b3;
+    color: #fff;
     cursor: pointer;
 }
 
@@ -43,7 +55,7 @@ body {
     cursor: not-allowed;
 }
 
-button {
+.startButton {
     padding: 15px 40px;
     font-size: 24px;
     font-weight: bold;
@@ -58,12 +70,12 @@ button {
     letter-spacing: 2px;
 }
 
-#root button:hover {
+#root .startButton:hover {
     transform: translateY(-3px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-#root button:active {
+#root .startButton:active {
     transform: translateY(0);
 }
 

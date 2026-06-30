@@ -46,7 +46,7 @@ export class View {
         rootElement.innerHTML = ''
         scoreElement.innerHTML = ''
 
-        rootElement.append(this.#settingsGridSize(dto))
+        rootElement.append(this.#settingsGame(dto))
 
         if (dto.status === GameStatuses.pending) {
             rootElement.append(this.#settingsScreen())
@@ -54,12 +54,13 @@ export class View {
             rootElement.append(this.#gridScreen(dto))
         }
 
-        scoreElement.innerText = `player1: ${dto.score[1].points} // player2: ${dto.score[2].points}`;
+        scoreElement.innerText = `player1: ${dto.score[1].points} // player2: ${dto.score[2].points}`
     }
 
     #settingsScreen() {
         const startButtonElement = document.createElement('button')
         startButtonElement.textContent = 'start game'
+        startButtonElement.className = 'startButton'
 
         //subject, publisher; subscribe, on, handle; observer, subscriber, handler
         startButtonElement.addEventListener('click', (e) => {
@@ -68,31 +69,44 @@ export class View {
         return startButtonElement
     }
 
+    #settingsGame(dto) {
+        const wrapper = document.createElement('div')
+        wrapper.className = 'settingsGame'
+        wrapper.append(this.#settingsGridSize(dto))
+        return wrapper
+    }
+
     #settingsGridSize(dto) {
+        const wrapper = document.createElement('div')
+        wrapper.className = 'settingsGridSize'
+
+        const label = document.createElement('label')
+        label.textContent = 'Grid size'
+        label.className = 'labelGridSize'
+
         const selectGridSize = document.createElement('select')
         selectGridSize.className = 'selectGridSize'
 
         if (dto.status !== GameStatuses.pending) {
-            selectGridSize.disabled = true;
+            selectGridSize.disabled = true
         }
 
-        dto.gridSizeSettings.forEach(data => {
-            const newOption = new Option(data.text, data.value);
-            selectGridSize.add(newOption);
-        });
+        dto.gridSizeSettings.forEach((data) => {
+            const newOption = new Option(data.text, data.value)
+            selectGridSize.add(newOption)
+        })
 
         selectGridSize.value = `${dto.gridSize.columnCount}x${dto.gridSize.rowCount}`
 
         selectGridSize.addEventListener('change', (e) => {
-            const option = dto.gridSizeSettings.find(item => item.value === e.target.value)
+            const option = dto.gridSizeSettings.find((item) => item.value === e.target.value)
             if (!option) return
-            this.#callbacks.onChangeGridSize(
-                option.columnCount,
-                option.rowCount
-            )
+            this.#callbacks.onChangeGridSize(option.columnCount, option.rowCount)
         })
 
-        return selectGridSize
+        wrapper.append(label, selectGridSize)
+
+        return wrapper
     }
 
     #gridScreen(dto) {
