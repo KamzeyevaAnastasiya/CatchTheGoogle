@@ -11,7 +11,7 @@ export class Game {
             rowCount: 4,
         },
         googleJumpInterval: 2000,
-        pointsToWin: 3,
+        pointsToWin: 20,
     }
 
     #gridSizeSettings = [
@@ -70,6 +70,10 @@ export class Game {
 
     get gridSizeSettings() {
         return this.#gridSizeSettings
+    }
+
+    get pointsToWin() {
+        return this.#settings.pointsToWin
     }
 
     get pointsToWinSettings() {
@@ -152,11 +156,11 @@ export class Game {
 
     //старт игры
     async start() {
-        if (this.#status === GameStatuses.pending) {
-            this.#createUnits()
-            this.#status = GameStatuses.in_progress
-            this.#runGoogleJumpInterval()
-        }
+        if (this.#status !== GameStatuses.pending) return
+
+        this.#status = GameStatuses.in_progress
+        this.#createUnits()
+        this.#runGoogleJumpInterval()
     }
 
     async stop() {

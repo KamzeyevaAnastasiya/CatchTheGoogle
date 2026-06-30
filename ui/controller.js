@@ -57,6 +57,7 @@ export class Controller {
             player2Position: this.model.player2Position,
             score: this.model.score,
             gridSizeSettings: this.model.gridSizeSettings,
+            pointsToWin: this.model.pointsToWin,
             pointsToWinSettings: this.model.pointsToWinSettings,
         })
     }

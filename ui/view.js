@@ -77,70 +77,75 @@ export class View {
         return wrapper
     }
 
-
-    #settingsGridSize(dto) {
+    #createSelect({
+                      labelText,
+                      options,
+                      value,
+                      disabled,
+                      onChange,
+                  }) {
         const wrapper = document.createElement('div')
         wrapper.className = 'settingsWrapper'
 
         const label = document.createElement('label')
-        label.textContent = 'Grid size'
+        label.textContent = labelText
         label.className = 'label'
 
-        const selectGridSize = document.createElement('select')
-        selectGridSize.className = 'select'
+        const select = document.createElement('select')
+        select.className = 'select'
+        select.disabled = disabled
 
-        if (dto.status !== GameStatuses.pending) {
-            selectGridSize.disabled = true
+        options.forEach((option) => {
+            select.add(new Option(option.text, option.value))
+        })
+
+        if (value !== undefined) {
+            select.value = value
         }
 
-        dto.gridSizeSettings.forEach((data) => {
-            const newOption = new Option(data.text, data.value)
-            selectGridSize.add(newOption)
+        select.addEventListener('change', (e) => {
+            const selectedOption = options.find(
+                (option) => option.value === e.target.value,
+            )
+
+            if (!selectedOption) return
+
+            onChange(selectedOption)
         })
 
-        selectGridSize.value = `${dto.gridSize.columnCount}x${dto.gridSize.rowCount}`
-
-        selectGridSize.addEventListener('change', (e) => {
-            const option = dto.gridSizeSettings.find((item) => item.value === e.target.value)
-            if (!option) return
-            this.#callbacks.onChangeGridSize(option.columnCount, option.rowCount)
-        })
-
-        wrapper.append(label, selectGridSize)
+        wrapper.append(label, select)
 
         return wrapper
+    }
+
+
+    #settingsGridSize(dto) {
+        return this.#createSelect({
+            labelText: 'Grid size',
+            options: dto.gridSizeSettings,
+            value: `${dto.gridSize.columnCount}x${dto.gridSize.rowCount}`,
+            disabled: dto.status !== GameStatuses.pending,
+            onChange: (option) => {
+                this.#callbacks.onChangeGridSize(
+                    option.columnCount,
+                    option.rowCount,
+                )
+            },
+        })
     }
 
     #settingsPointsToWin(dto) {
-        const wrapper = document.createElement('div')
-        wrapper.className = 'settingsWrapper'
-
-        const label = document.createElement('label')
-        label.textContent = 'Points to win'
-        label.className = 'label'
-
-        const selectPointsToWin = document.createElement('select')
-        selectPointsToWin.className = 'select'
-
-        if (dto.status !== GameStatuses.pending) {
-            selectPointsToWin.disabled = true
-        }
-
-        dto.pointsToWinSettings.forEach((data) => {
-            const newOption = new Option(data.text, data.value)
-            selectPointsToWin.add(newOption)
+        return this.#createSelect({
+            labelText: 'Points to win',
+            options: dto.pointsToWinSettings,
+            value: `${dto.pointsToWin}pts`,
+            disabled: dto.status !== GameStatuses.pending,
+            onChange: (option) => {
+                this.#callbacks.onChangePointsToWin(option.pointsToWin)
+            },
         })
-
-        selectPointsToWin.addEventListener('change', (e) => {
-            const option = dto.pointsToWinSettings.find((item) => item.value === e.target.value)
-            if (!option) return
-            this.#callbacks.onChangePointsToWin(option.value)
-        })
-
-        wrapper.append(label, selectPointsToWin)
-
-        return wrapper
     }
+
 
     #gridScreen(dto) {
         const tableElement = document.createElement('table')
