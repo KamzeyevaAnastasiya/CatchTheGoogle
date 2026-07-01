@@ -5,37 +5,27 @@ import {Google} from "../core/unit.js";
 export class View {
     #callbacks = {}
 
+    #keyBindings = {
+        ArrowUp: {player: 1, direction: MoveDirections.UP},
+        ArrowDown: {player: 1, direction: MoveDirections.DOWN},
+        ArrowLeft: {player: 1, direction: MoveDirections.LEFT},
+        ArrowRight: {player: 1, direction: MoveDirections.RIGHT},
+
+        KeyW: {player: 2, direction: MoveDirections.UP},
+        KeyS: {player: 2, direction: MoveDirections.DOWN},
+        KeyA: {player: 2, direction: MoveDirections.LEFT},
+        KeyD: {player: 2, direction: MoveDirections.RIGHT},
+    }
+
     constructor() {
         this.rootElement = document.getElementById('root')
+        document.addEventListener('keyup', this.#handleKeyUp)
+    }
 
-        document.addEventListener('keyup', (e) => {
-            switch (e.code) {
-                case 'ArrowUp':
-                    this.#callbacks.onMove(1, MoveDirections.UP)
-                    break
-                case 'ArrowDown':
-                    this.#callbacks.onMove(1, MoveDirections.DOWN)
-                    break
-                case 'ArrowLeft':
-                    this.#callbacks.onMove(1, MoveDirections.LEFT)
-                    break
-                case 'ArrowRight':
-                    this.#callbacks.onMove(1, MoveDirections.RIGHT)
-                    break
-                case 'KeyW':
-                    this.#callbacks.onMove(2, MoveDirections.UP)
-                    break
-                case 'KeyS':
-                    this.#callbacks.onMove(2, MoveDirections.DOWN)
-                    break
-                case 'KeyA':
-                    this.#callbacks.onMove(2, MoveDirections.LEFT)
-                    break
-                case 'KeyD':
-                    this.#callbacks.onMove(2, MoveDirections.RIGHT)
-                    break
-            }
-        })
+    #handleKeyUp = (e) => {
+        const binding = this.#keyBindings[e.code]
+        if (!binding) return
+        this.#callbacks.onMove(binding.player, binding.direction)
     }
 
     setCallbacks(callbacksProps) {
