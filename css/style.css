@@ -25,10 +25,12 @@ body {
 
 .wrapperSettingsGame {
     display: flex;
+    justify-content: center;
     gap: 12px;
     position: fixed;
-    top: 5%;
-    left: 5%;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .settingsWrapper {
@@ -111,22 +113,26 @@ img {
     animation: fadeIn 0.3s ease;
 }
 
-#score {
+.score {
+    display: flex;
+    justify-content: space-around;
     position: fixed;
     top: 15%;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    color: white;
-    padding: 15px 30px;
-    border-radius: 50px;
+    background: rgba(57, 61, 55, 0.4);
+    border: 1px solid #4c5e50;
+    border-radius: 30px;
+    padding: 12px 36px;
+    width: 1040px;
+    height: 72px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 133%;
+    color: #fff;
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
+    backdrop-filter: blur(10px);
     letter-spacing: 2px;
-    border: none;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     white-space: nowrap;
     font-family: monospace;

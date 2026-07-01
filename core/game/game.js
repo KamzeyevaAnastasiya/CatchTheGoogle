@@ -48,6 +48,7 @@ export class Game {
     #score = {
         1: {points: 0},
         2: {points: 0},
+        google: {jumps: 0},
     }
 
     //утилита для генерации чисел Google
@@ -155,6 +156,7 @@ export class Game {
         if (this.#status !== GameStatuses.in_progress) return
         if (this.#settings.googleJumpInterval === 0) return
         this.#googleSetIntervalId = setInterval(() => {
+            this.#score.google.jumps++
             this.#moveGoogleToRandomPosition()
         }, this.#settings.googleJumpInterval)
     }

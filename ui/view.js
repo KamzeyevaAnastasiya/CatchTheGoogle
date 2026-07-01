@@ -1,12 +1,12 @@
 import {GameStatuses} from '../core/game/gameStatuses.js'
 import {MoveDirections} from '../core/moveDirections.js'
+import {Google} from "../core/unit.js";
 
 export class View {
     #callbacks = {}
 
     constructor() {
         this.rootElement = document.getElementById('root')
-        this.scoreElement = document.getElementById('score')
 
         document.addEventListener('keyup', (e) => {
             switch (e.code) {
@@ -44,17 +44,39 @@ export class View {
 
     render(dto) {
         this.rootElement.innerHTML = ''
-        this.scoreElement.innerHTML = ''
 
         this.rootElement.append(this.#settingsGame(dto))
 
         if (dto.status === GameStatuses.pending) {
             this.rootElement.append(this.#settingsScreen())
         } else if (dto.status === GameStatuses.in_progress) {
+            this.rootElement.append(this.#score(dto))
             this.rootElement.append(this.#gridScreen(dto))
         }
+    }
 
-        this.scoreElement.innerText = `player1: ${dto.score[1].points} // player2: ${dto.score[2].points}`
+    #score(dto) {
+        const score = document.createElement('div')
+        score.className = 'score'
+        score.innerHTML = ''
+
+        const scorePlayer1 = document.createElement('div')
+        const player1 = '../img/icons/man01.svg'
+        scorePlayer1.innerHTML = `Player 1: <img src="${player1}" alt="Player 1" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[1].points}`
+
+        const scorePlayer2 = document.createElement('div')
+        const player2 = '../img/icons/man02.svg'
+        scorePlayer2.innerHTML = `Player 2: <img src="${player2}" alt="Player 2" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[2].points}`
+
+        const scoreGoogle = document.createElement('div')
+        const google = '../img/icons/googleIcon.svg'
+        scoreGoogle.innerHTML = `Google: <img src="${google}" alt="Google" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score.google.jumps}`
+
+        score.appendChild(scorePlayer1)
+        score.appendChild(scorePlayer2)
+        score.appendChild(scoreGoogle)
+
+        return score
     }
 
     #settingsScreen() {
