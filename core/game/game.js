@@ -4,7 +4,7 @@ import {Position} from '../position.js'
 import {Player, Google} from '../unit.js'
 
 export class Game {
-    //базовые настройки
+    //Базовые настройки
     #settings = {
         gridSize: {
             columnCount: 4,
@@ -38,25 +38,27 @@ export class Game {
         {text: '25 sec', value: '25000', googleJumpInterval: 25000},
     ]
 
-    //состояни игры
     #status = GameStatuses.pending
+
     #player1
     #player2
     #google
+
     #callbackProps = {}
     #googleSetIntervalId
+
     #score = {
         1: {points: 0},
         2: {points: 0},
         google: {jumps: 0},
     }
 
-    //утилита для генерации чисел Google
+    //Конструктор
     constructor(callbackProps) {
         this.#callbackProps = callbackProps
     }
 
-    //настройки игры
+    //Настройки игры
     set settings(settings) {
         this.#settings = {...this.#settings, ...settings}
 
@@ -65,6 +67,29 @@ export class Game {
             : this.#settings.gridSize
     }
 
+    changeGridSize(columnCount, rowCount) {
+        if (this.#status === GameStatuses.in_progress) return
+
+        this.#settings.gridSize.columnCount = columnCount
+        this.#settings.gridSize.rowCount = rowCount
+        this.#callbackProps.onChange()
+    }
+
+    changePointsToWin(pointsToWin) {
+        if (this.#status === GameStatuses.in_progress) return
+
+        this.#settings.pointsToWin = pointsToWin
+        this.#callbackProps.onChange()
+    }
+
+    changeGoogleJumpInterval(googleJumpInterval) {
+        if (this.#status === GameStatuses.in_progress) return
+
+        this.#settings.googleJumpInterval = googleJumpInterval
+        this.#callbackProps.onChange()
+    }
+
+    //Геттеры
     get status() {
         return this.#status
     }
@@ -117,7 +142,27 @@ export class Game {
         this.#score = value
     }
 
-    //генерация несовпадающих позиций
+    //Запуск игры
+    start() {
+        if (this.#status !== GameStatuses.pending) return
+
+        this.#status = GameStatuses.in_progress
+        this.#createUnits()
+        this.#runGoogleJumpInterval()
+        this.#callbackProps.onChange()
+    }
+
+    // Создание игровых объектов
+    #createUnits() {
+        const player1Position = this.#getRandomPosition([])
+        this.#player1 = new Player(1, player1Position)
+
+        const player2Position = this.#getRandomPosition([player1Position])
+        this.#player2 = new Player(2, player2Position)
+
+        this.#moveGoogleToRandomPosition()
+    }
+
     #getRandomPosition(coordinates) {
         let newX, newY
 
@@ -127,17 +172,6 @@ export class Game {
         } while (coordinates.some((el) => el.x === newX && el.y === newY))
 
         return new Position(newX, newY)
-    }
-
-    // Создание игроков и Google
-    #createUnits() {
-        const player1Position = this.#getRandomPosition([])
-        this.#player1 = new Player(1, player1Position)
-
-        const player2Position = this.#getRandomPosition([player1Position])
-        this.#player2 = new Player(2, player2Position)
-
-        this.#moveGoogleToRandomPosition()
     }
 
     #moveGoogleToRandomPosition() {
@@ -161,104 +195,7 @@ export class Game {
         }, this.#settings.googleJumpInterval)
     }
 
-    //старт игры
-    start() {
-        if (this.#status !== GameStatuses.pending) return
-
-        this.#status = GameStatuses.in_progress
-        this.#createUnits()
-        this.#runGoogleJumpInterval()
-        this.#callbackProps.onChange()
-    }
-
-    stop() {
-        clearInterval(this.#googleSetIntervalId)
-        this.#status = GameStatuses.stoped
-    }
-
-    changeGridSize(columnCount, rowCount) {
-        if (this.#status === GameStatuses.in_progress) return
-
-        this.#settings.gridSize.columnCount = columnCount
-        this.#settings.gridSize.rowCount = rowCount
-        this.#callbackProps.onChange()
-    }
-
-    changePointsToWin(pointsToWin) {
-        if (this.#status === GameStatuses.in_progress) return
-
-        this.#settings.pointsToWin = pointsToWin
-        this.#callbackProps.onChange()
-    }
-
-    changeGoogleJumpInterval(googleJumpInterval) {
-        if (this.#status === GameStatuses.in_progress) return
-
-        this.#settings.googleJumpInterval = googleJumpInterval
-        this.#callbackProps.onChange()
-    }
-
-    #checkBorders(player, delta) {
-        const newPosition = player.position.clone()
-        if (delta.x) newPosition.x += delta.x
-        if (delta.y) newPosition.y += delta.y
-
-        if (newPosition.x < 0 || newPosition.x >= this.#settings.gridSize.columnCount) {
-            return true
-        }
-        if (newPosition.y < 0 || newPosition.y >= this.#settings.gridSize.rowCount) {
-            return true
-        }
-
-        return false
-    }
-
-    #checkOtherPlayer(movingPlayer, anotherPlayer, delta) {
-        const newPosition = movingPlayer.position.clone()
-        if (delta.x) newPosition.x += delta.x
-        if (delta.y) newPosition.y += delta.y
-
-        return anotherPlayer.position.equal(newPosition)
-    }
-
-    #checkGoogleCatching(player) {
-        if (!player.position.equal(this.#google.position)) {
-            return
-        }
-        //если поймали, то увеличиваем счет
-        this.#score[player.id].points += 1
-
-        if (this.#score[player.id].points === this.#settings.pointsToWin) {
-            this.#finishGame()
-        } else {
-            this.#moveGoogleToRandomPosition()
-        }
-    }
-
-    movePlayer(movingPlayer, anotherPlayer, delta) {
-        if (this.#status !== GameStatuses.in_progress) return
-
-        // стоп таймер на время хода
-        clearInterval(this.#googleSetIntervalId)
-        const isBorder = this.#checkBorders(movingPlayer, delta)
-        const isAnotherPlayer = this.#checkOtherPlayer(movingPlayer, anotherPlayer, delta)
-        if (isBorder || isAnotherPlayer) {
-            this.#runGoogleJumpInterval() //возврат таймера
-            return
-        }
-
-        const newPosition = movingPlayer.position.clone()
-
-        if (delta.x !== undefined) newPosition.x += delta.x
-        if (delta.y !== undefined) newPosition.y += delta.y
-
-        movingPlayer.position = newPosition
-
-        this.#checkGoogleCatching(movingPlayer)
-        this.#runGoogleJumpInterval() //возврат таймера после хода
-        this.#callbackProps.onChange()
-    }
-
+    //Управление игроками
     movePlayer1Right() {
         const delta = {x: 1}
         this.movePlayer(this.#player1, this.#player2, delta)
@@ -299,6 +236,76 @@ export class Game {
         this.movePlayer(this.#player2, this.#player1, delta)
     }
 
+    // Общая логика движения
+    movePlayer(movingPlayer, anotherPlayer, delta) {
+        if (this.#status !== GameStatuses.in_progress) return
+
+        // стоп таймер на время хода
+        clearInterval(this.#googleSetIntervalId)
+        const isBorder = this.#checkBorders(movingPlayer, delta)
+        const isAnotherPlayer = this.#checkOtherPlayer(movingPlayer, anotherPlayer, delta)
+        if (isBorder || isAnotherPlayer) {
+            this.#runGoogleJumpInterval() //возврат таймера
+            return
+        }
+
+        const newPosition = movingPlayer.position.clone()
+
+        if (delta.x !== undefined) newPosition.x += delta.x
+        if (delta.y !== undefined) newPosition.y += delta.y
+
+        movingPlayer.position = newPosition
+
+        this.#checkGoogleCatching(movingPlayer)
+        this.#runGoogleJumpInterval() //возврат таймера после хода
+        this.#callbackProps.onChange()
+    }
+
+    //Проверки
+    #checkBorders(player, delta) {
+        const newPosition = player.position.clone()
+        if (delta.x) newPosition.x += delta.x
+        if (delta.y) newPosition.y += delta.y
+
+        if (newPosition.x < 0 || newPosition.x >= this.#settings.gridSize.columnCount) {
+            return true
+        }
+        if (newPosition.y < 0 || newPosition.y >= this.#settings.gridSize.rowCount) {
+            return true
+        }
+
+        return false
+    }
+
+    #checkOtherPlayer(movingPlayer, anotherPlayer, delta) {
+        const newPosition = movingPlayer.position.clone()
+        if (delta.x) newPosition.x += delta.x
+        if (delta.y) newPosition.y += delta.y
+
+        return anotherPlayer.position.equal(newPosition)
+    }
+
+    #checkGoogleCatching(player) {
+        if (!player.position.equal(this.#google.position)) {
+            return
+        }
+        //если поймали, то увеличиваем счет
+        this.#score[player.id].points += 1
+
+        if (this.#score[player.id].points === this.#settings.pointsToWin) {
+            this.#finishGame()
+        } else {
+            this.#moveGoogleToRandomPosition()
+        }
+    }
+
+    //Остановка игры
+    stop() {
+        clearInterval(this.#googleSetIntervalId)
+        this.#status = GameStatuses.stoped
+    }
+
+    //Завершение игры
     #finishGame() {
         clearInterval(this.#googleSetIntervalId)
         this.#status = GameStatuses.finished
