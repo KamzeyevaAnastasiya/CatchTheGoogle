@@ -11,7 +11,7 @@ export class Game {
             rowCount: 4,
         },
         googleJumpInterval: 2000,
-        pointsToWin: 20,
+        pointsToWin: 10,
     }
 
     #gridSizeSettings = [
@@ -23,11 +23,11 @@ export class Game {
     ]
 
     #pointsToWinSettings = [
+        {text: '10pts', value: '10pts', pointsToWin: 10},
+        {text: '15pts', value: '15pts', pointsToWin: 15},
         {text: '20pts', value: '20pts', pointsToWin: 20},
-        {text: '40pts', value: '40pts', pointsToWin: 40},
-        {text: '50pts', value: '50pts', pointsToWin: 50},
-        {text: '60pts', value: '60pts', pointsToWin: 60},
-        {text: '80pts', value: '80pts', pointsToWin: 80},
+        {text: '25pts', value: '25pts', pointsToWin: 25},
+        {text: '30pts', value: '30pts', pointsToWin: 30},
     ]
 
     //состояни игры
