@@ -10,8 +10,8 @@ export class Game {
             columnCount: 4,
             rowCount: 4,
         },
-        googleJumpInterval: 2000,
         pointsToWin: 10,
+        googleJumpInterval: 5000,
     }
 
     #gridSizeSettings = [
@@ -28,6 +28,14 @@ export class Game {
         {text: '20pts', value: '20pts', pointsToWin: 20},
         {text: '25pts', value: '25pts', pointsToWin: 25},
         {text: '30pts', value: '30pts', pointsToWin: 30},
+    ]
+
+    #googleJumpIntervalSettings = [
+        {text: '5 sec', value: '5000', googleJumpInterval: 5000},
+        {text: '10 sec', value: '10000', googleJumpInterval: 10000},
+        {text: '15 sec', value: '15000', googleJumpInterval: 15000},
+        {text: '20 sec', value: '20000', googleJumpInterval: 20000},
+        {text: '25 sec', value: '25000', googleJumpInterval: 25000},
     ]
 
     //состояни игры
@@ -76,6 +84,14 @@ export class Game {
         return this.#pointsToWinSettings
     }
 
+    get googleJumpInterval() {
+        return this.#settings.googleJumpInterval
+    }
+
+    get googleJumpIntervalSettings() {
+        return this.#googleJumpIntervalSettings
+    }
+
     get googlePosition() {
         return this.#google ? this.#google.position : null
     }
@@ -94,13 +110,6 @@ export class Game {
 
     get score() {
         return this.#score
-    }
-
-    set googleJumpInterval(value) {
-        if (!Number.isInteger(value) || value < 0) {
-            throw new Error(`Google Jump Interval must be a positive integer`)
-        }
-        this.#settings.googleJumpInterval = value
     }
 
     set score(value) {
@@ -127,7 +136,7 @@ export class Game {
         const player2Position = this.#getRandomPosition([player1Position])
         this.#player2 = new Player(2, player2Position)
 
-        this.#moveGoogleToRandomPosition(true)
+        this.#moveGoogleToRandomPosition()
     }
 
     #moveGoogleToRandomPosition() {
@@ -146,7 +155,7 @@ export class Game {
         if (this.#status !== GameStatuses.in_progress) return
         if (this.#settings.googleJumpInterval === 0) return
         this.#googleSetIntervalId = setInterval(() => {
-            this.#moveGoogleToRandomPosition(true)
+            this.#moveGoogleToRandomPosition()
         }, this.#settings.googleJumpInterval)
     }
 
@@ -175,7 +184,15 @@ export class Game {
 
     changePointsToWin(pointsToWin) {
         if (this.#status === GameStatuses.in_progress) return
+
         this.#settings.pointsToWin = pointsToWin
+        this.#callbackProps.onChange()
+    }
+
+    changeGoogleJumpInterval(googleJumpInterval) {
+        if (this.#status === GameStatuses.in_progress) return
+
+        this.#settings.googleJumpInterval = googleJumpInterval
         this.#callbackProps.onChange()
     }
 
@@ -212,7 +229,7 @@ export class Game {
         if (this.#score[player.id].points === this.#settings.pointsToWin) {
             this.#finishGame()
         } else {
-            this.#moveGoogleToRandomPosition(true)
+            this.#moveGoogleToRandomPosition()
         }
     }
 

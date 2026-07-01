@@ -33,6 +33,9 @@ export class Controller {
             onChangePointsToWin: (pointsToWin) => {
                 this.#changePointsToWin(pointsToWin)
             },
+            onChangeGoogleJumpInterval: (googleJumpInterval) => {
+                this.#changeGoogleJumpInterval(googleJumpInterval)
+            },
         })
         this.#renderView()
     }
@@ -49,6 +52,10 @@ export class Controller {
         this.model.changePointsToWin(pointsToWin)
     }
 
+    #changeGoogleJumpInterval(googleJumpInterval) {
+        this.model.changeGoogleJumpInterval(googleJumpInterval)
+    }
+
     #renderView() {
         this.view.render({
             status: this.model.status,
@@ -60,6 +67,8 @@ export class Controller {
             gridSizeSettings: this.model.gridSizeSettings,
             pointsToWin: this.model.pointsToWin,
             pointsToWinSettings: this.model.pointsToWinSettings,
+            googleJumpInterval: this.model.googleJumpInterval,
+            googleJumpIntervalSettings: this.model.googleJumpIntervalSettings,
         })
     }
 }

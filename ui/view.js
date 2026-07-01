@@ -74,6 +74,7 @@ export class View {
         wrapper.className = 'wrapperSettingsGame'
         wrapper.append(this.#settingsGridSize(dto))
         wrapper.append(this.#settingsPointsToWin(dto))
+        wrapper.append(this.#settingsGoogleJumpInterval(dto))
         return wrapper
     }
 
@@ -107,14 +108,11 @@ export class View {
             const selectedOption = options.find(
                 (option) => option.value === e.target.value,
             )
-
             if (!selectedOption) return
-
             onChange(selectedOption)
         })
 
         wrapper.append(label, select)
-
         return wrapper
     }
 
@@ -146,6 +144,17 @@ export class View {
         })
     }
 
+    #settingsGoogleJumpInterval(dto) {
+        return this.#createSelect({
+            labelText: 'Google Jump Interval',
+            options: dto.googleJumpIntervalSettings,
+            value: String(dto.googleJumpInterval),
+            disabled: dto.status !== GameStatuses.pending,
+            onChange: (option) => {
+                this.#callbacks.onChangeGoogleJumpInterval(option.googleJumpInterval)
+            },
+        })
+    }
 
     #gridScreen(dto) {
         const tableElement = document.createElement('table')
