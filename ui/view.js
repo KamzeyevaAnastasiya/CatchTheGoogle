@@ -104,12 +104,15 @@ export class View {
     #settingsGame(dto) {
         const wrapper = document.createElement('div')
         wrapper.className = 'wrapperSettingsGame'
+
         wrapper.append(this.#settingsGridSize(dto))
         wrapper.append(this.#settingsPointsToWin(dto))
         wrapper.append(this.#settingsGoogleJumpInterval(dto))
+
         if (dto.status === GameStatuses.in_progress) {
             wrapper.append(this.#stopGame())
         }
+
         return wrapper
     }
 
@@ -197,6 +200,7 @@ export class View {
         const imgElement = document.createElement('img')
         imgElement.src = '../img/icons/stopIcon.svg'
         imgElement.alt = 'Stop game'
+
         stopButtonElement.appendChild(imgElement)
         stopButtonElement.addEventListener('click', () => {
             this.#callbacks.onStop?.()
@@ -207,8 +211,10 @@ export class View {
     #dialogStopGame() {
         const dialog = document.createElement('dialog')
         dialog.className = 'dialogStopGame'
+
         const text = document.createElement('p')
         text.textContent = 'GAME PAUSED'
+
         const quitButton = document.createElement('button')
         quitButton.textContent = 'QUIT'
         quitButton.addEventListener('click', () => {
@@ -217,6 +223,7 @@ export class View {
             this.#stopDialog = null
             this.#callbacks.onFinish?.()
         })
+
         const resumeButton = document.createElement('button')
         resumeButton.textContent = 'RESUME'
         resumeButton.addEventListener('click', () => {
@@ -225,13 +232,13 @@ export class View {
             this.#stopDialog = null
             this.#callbacks.onResume?.()
         })
+
         dialog.append(text, quitButton, resumeButton)
         return dialog
     }
 
     #showStopDialog() {
         if (this.#stopDialog) return
-
         this.#stopDialog = this.#dialogStopGame()
         document.body.append(this.#stopDialog)
         this.#stopDialog.showModal()
@@ -240,8 +247,10 @@ export class View {
     #info() {
         const dialog = document.createElement('dialog')
         dialog.className = 'info'
+
         const text = document.createElement('p')
         text.textContent = 'Control is done with “arrows for player 1” and “WASD for player 2”'
+
         const button = document.createElement('button')
         button.textContent = 'OK'
         button.addEventListener('click', () => {
@@ -249,6 +258,7 @@ export class View {
             dialog.remove()
             this.#infoDialog = null
         })
+
         dialog.append(text, button)
         return dialog
     }
@@ -257,7 +267,6 @@ export class View {
         if (this.#infoDialog) {
             this.#infoDialog.remove()
         }
-
         this.#infoDialog = this.#info()
         document.body.append(this.#infoDialog)
         this.#infoDialog.showModal()
