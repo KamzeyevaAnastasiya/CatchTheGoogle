@@ -70,12 +70,6 @@ body {
     cursor: pointer;
 }
 
-.stopButton img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-}
-
 .startScreen {
     flex: 1;
     display: flex;

@@ -197,11 +197,9 @@ export class View {
         const stopButtonElement = document.createElement('button')
         stopButtonElement.className = 'stopButton'
 
-        const imgElement = document.createElement('img')
-        imgElement.src = '../img/icons/stopIcon.svg'
-        imgElement.alt = 'Stop game'
+        const stopIcon = '../img/icons/stopIcon.svg'
+        stopButtonElement.innerHTML = `<img src="${stopIcon}" alt="Stop game" style="width: 20px; height: 20px; vertical-align: middle">`
 
-        stopButtonElement.appendChild(imgElement)
         stopButtonElement.addEventListener('click', () => {
             this.#callbacks.onStop?.()
         })
@@ -220,7 +218,7 @@ export class View {
 
         const quitButton = document.createElement('button')
         const quitIcon = '../img/icons/quitIcon.svg'
-        quitButton.innerHTML = `<img src="${quitIcon}" alt="quit" style="width: 20px; height: 20px; vertical-align: middle"> QUIT`
+        quitButton.innerHTML = `<img src="${quitIcon}" alt="Quit game" style="width: 20px; height: 20px; vertical-align: middle"> QUIT`
         quitButton.className = 'quitButton'
         quitButton.addEventListener('click', () => {
             dialog.close()
@@ -231,7 +229,7 @@ export class View {
 
         const resumeButton = document.createElement('button')
         const resumeIcon = '../img/icons/resumeIcon.svg'
-        resumeButton.innerHTML = `<img src="${resumeIcon}" alt="quit" style="width: 20px; height: 20px; vertical-align: middle"> RESUME`
+        resumeButton.innerHTML = `<img src="${resumeIcon}" alt="Resume game" style="width: 20px; height: 20px; vertical-align: middle"> RESUME`
         resumeButton.className = 'resumeButton'
         resumeButton.addEventListener('click', () => {
             dialog.close()
