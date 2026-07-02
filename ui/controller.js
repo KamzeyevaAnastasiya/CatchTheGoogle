@@ -10,17 +10,17 @@ export class Controller {
         })
         this.view = view
         this.view.setCallbacks({
+            onChangeGridSize: (columnCount, rowCount) => {
+                this.#changeGridSize(columnCount, rowCount)
+            },
+            onChangePointsToWin: (pointsToWin) => {
+                this.#changePointsToWin(pointsToWin)
+            },
+            onChangeGoogleJumpInterval: (googleJumpInterval) => {
+                this.#changeGoogleJumpInterval(googleJumpInterval)
+            },
             onStart: () => {
                 this.#startGame()
-            },
-            onStop: () => {
-                this.#stopGame()
-            },
-            onResume: () => {
-                this.#resumeGame()
-            },
-            onFinish: () => {
-                this.#finishGame()
             },
             onMove: (playerNumber, direction) => {
                 if (playerNumber === 1) {
@@ -36,45 +36,17 @@ export class Controller {
                     if (direction === MoveDirections.RIGHT) this.model.movePlayer2Right()
                 }
             },
-            onChangeGridSize: (columnCount, rowCount) => {
-                this.#changeGridSize(columnCount, rowCount)
+            onStop: () => {
+                this.#stopGame()
             },
-            onChangePointsToWin: (pointsToWin) => {
-                this.#changePointsToWin(pointsToWin)
+            onResume: () => {
+                this.#resumeGame()
             },
-            onChangeGoogleJumpInterval: (googleJumpInterval) => {
-                this.#changeGoogleJumpInterval(googleJumpInterval)
+            onFinish: () => {
+                this.#finishGame()
             },
         })
         this.#renderView()
-    }
-
-    #startGame() {
-        this.model.start()
-    }
-
-    #stopGame() {
-        this.model.stop()
-    }
-
-    #resumeGame() {
-        this.model.resume()
-    }
-
-    #finishGame() {
-        this.model.finishGame()
-    }
-
-    #changeGridSize(columnCount, rowCount) {
-        this.model.changeGridSize(columnCount, rowCount)
-    }
-
-    #changePointsToWin(pointsToWin) {
-        this.model.changePointsToWin(pointsToWin)
-    }
-
-    #changeGoogleJumpInterval(googleJumpInterval) {
-        this.model.changeGoogleJumpInterval(googleJumpInterval)
     }
 
     #renderView() {
@@ -91,5 +63,33 @@ export class Controller {
             googleJumpInterval: this.model.googleJumpInterval,
             googleJumpIntervalSettings: this.model.googleJumpIntervalSettings,
         })
+    }
+
+    #changeGridSize(columnCount, rowCount) {
+        this.model.changeGridSize(columnCount, rowCount)
+    }
+
+    #changePointsToWin(pointsToWin) {
+        this.model.changePointsToWin(pointsToWin)
+    }
+
+    #changeGoogleJumpInterval(googleJumpInterval) {
+        this.model.changeGoogleJumpInterval(googleJumpInterval)
+    }
+
+    #startGame() {
+        this.model.start()
+    }
+
+    #stopGame() {
+        this.model.stop()
+    }
+
+    #resumeGame() {
+        this.model.resume()
+    }
+
+    #finishGame() {
+        this.model.finishGame()
     }
 }
