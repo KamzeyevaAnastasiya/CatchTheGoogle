@@ -147,6 +147,69 @@ img {
     font-family: monospace;
 }
 
+.stopGameDialog {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: none;
+    border: none;
+}
+
+.stopGameDialog::backdrop {
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(3px);
+}
+
+.stopGameDialog p {
+    font-weight: 600;
+    font-size: 42px;
+    color: #fff;
+}
+
+.stopGameDialogWrapper {
+    display: flex;
+    justify-content: space-around;
+    gap: 24px;
+}
+
+.quitButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 -4px 10px 2px rgba(249, 76, 76, 0.15), 0 4px 10px 2px rgba(249, 76, 76, 0.15);
+    background: #a73131;
+    border: 2px solid #f94c4c;
+    border-radius: 2px;
+    padding: 12px 24px;
+    width: 150px;
+    height: 48px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.resumeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 -4px 10px 2px rgba(202, 119, 25, 0.15), 0 4px 10px 2px rgba(202, 119, 25, 0.15);
+    background: #4ca731;
+    border: 2px solid #75f94c;
+    border-radius: 2px;
+    padding: 12px 24px;
+    width: 150px;
+    height: 48px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
 .infoGameDialog {
     margin: auto;
     display: flex;

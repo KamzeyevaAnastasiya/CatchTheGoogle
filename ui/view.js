@@ -215,8 +215,13 @@ export class View {
         const text = document.createElement('p')
         text.textContent = 'GAME PAUSED'
 
+        const wrapper = document.createElement('div')
+        wrapper.className = 'stopGameDialogWrapper'
+
         const quitButton = document.createElement('button')
-        quitButton.textContent = 'QUIT'
+        const quitIcon = '../img/icons/quitIcon.svg'
+        quitButton.innerHTML = `<img src="${quitIcon}" alt="quit" style="width: 20px; height: 20px; vertical-align: middle"> QUIT`
+        quitButton.className = 'quitButton'
         quitButton.addEventListener('click', () => {
             dialog.close()
             dialog.remove()
@@ -225,7 +230,9 @@ export class View {
         })
 
         const resumeButton = document.createElement('button')
-        resumeButton.textContent = 'RESUME'
+        const resumeIcon = '../img/icons/resumeIcon.svg'
+        resumeButton.innerHTML = `<img src="${resumeIcon}" alt="quit" style="width: 20px; height: 20px; vertical-align: middle"> RESUME`
+        resumeButton.className = 'resumeButton'
         resumeButton.addEventListener('click', () => {
             dialog.close()
             dialog.remove()
@@ -233,7 +240,8 @@ export class View {
             this.#callbacks.onResume?.()
         })
 
-        dialog.append(text, quitButton, resumeButton)
+        wrapper.append(quitButton, resumeButton)
+        dialog.append(text, wrapper)
         return dialog
     }
 
