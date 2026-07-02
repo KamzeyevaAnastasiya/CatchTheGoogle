@@ -47,7 +47,7 @@ export class View {
             this.rootElement.append(this.#gridScreen(dto))
         }
         if (dto.status === GameStatuses.paused) {
-            this.#showStopDialog()
+            this.#showStopGameDialog()
         }
     }
 
@@ -208,7 +208,7 @@ export class View {
         return stopButtonElement
     }
 
-    #dialogStopGame() {
+    #stopGameDialog() {
         const dialog = document.createElement('dialog')
         dialog.className = 'dialogStopGame'
 
@@ -237,14 +237,14 @@ export class View {
         return dialog
     }
 
-    #showStopDialog() {
+    #showStopGameDialog() {
         if (this.#stopDialog) return
-        this.#stopDialog = this.#dialogStopGame()
+        this.#stopDialog = this.#stopGameDialog()
         document.body.append(this.#stopDialog)
         this.#stopDialog.showModal()
     }
 
-    #info() {
+    #infoGameDialog() {
         const dialog = document.createElement('dialog')
         dialog.className = 'info'
 
@@ -267,7 +267,7 @@ export class View {
         if (this.#infoDialog) {
             this.#infoDialog.remove()
         }
-        this.#infoDialog = this.#info()
+        this.#infoDialog = this.#infoGameDialog()
         document.body.append(this.#infoDialog)
         this.#infoDialog.showModal()
     }
