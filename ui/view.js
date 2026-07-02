@@ -4,6 +4,7 @@ import {Google} from "../core/unit.js";
 
 export class View {
     #callbacks = {}
+    #infoDialog = null
 
     #keyBindings = {
         ArrowUp: {player: 1, direction: MoveDirections.UP},
@@ -69,16 +70,48 @@ export class View {
         return score
     }
 
+    #info() {
+        const dialog = document.createElement('dialog')
+        dialog.className = 'info'
+        const text = document.createElement('p')
+        text.textContent = 'Control is done with “arrows for player 1” and “WASD for player 2”'
+        const button = document.createElement('button')
+        button.textContent = 'OK'
+        button.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+            this.#infoDialog = null
+        })
+        dialog.append(text, button)
+        return dialog
+    }
+
+    #showInfoDialog() {
+        if (this.#infoDialog) {
+            this.#infoDialog.remove()
+        }
+
+        this.#infoDialog = this.#info()
+        document.body.append(this.#infoDialog)
+        this.#infoDialog.showModal()
+    }
+
     #settingsScreen() {
+        const wrapper = document.createElement('div')
+        wrapper.className = 'startScreen'
+
         const startButtonElement = document.createElement('button')
-        startButtonElement.textContent = 'start game'
+        startButtonElement.textContent = 'Start game'
         startButtonElement.className = 'startButton'
 
         //subject, publisher; subscribe, on, handle; observer, subscriber, handler
-        startButtonElement.addEventListener('click', (e) => {
+        startButtonElement.addEventListener('click', () => {
             this.#callbacks.onStart()
+            this.#showInfoDialog()
         })
-        return startButtonElement
+
+        wrapper.append(startButtonElement)
+        return wrapper
     }
 
     #settingsGame(dto) {
@@ -127,7 +160,6 @@ export class View {
         wrapper.append(label, select)
         return wrapper
     }
-
 
     #settingsGridSize(dto) {
         return this.#createSelect({
