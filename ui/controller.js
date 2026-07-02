@@ -16,6 +16,12 @@ export class Controller {
             onStop: () => {
                 this.#stopGame()
             },
+            onResume: () => {
+                this.#resumeGame()
+            },
+            onFinish: () => {
+                this.#finishGame()
+            },
             onMove: (playerNumber, direction) => {
                 if (playerNumber === 1) {
                     if (direction === MoveDirections.UP) this.model.movePlayer1Up()
@@ -46,8 +52,17 @@ export class Controller {
     #startGame() {
         this.model.start()
     }
+
     #stopGame() {
         this.model.stop()
+    }
+
+    #resumeGame() {
+        this.model.resume()
+    }
+
+    #finishGame() {
+        this.model.finishGame()
     }
 
     #changeGridSize(columnCount, rowCount) {
