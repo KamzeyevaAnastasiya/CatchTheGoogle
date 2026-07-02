@@ -8,17 +8,17 @@ describe('Game test', () => {
     game = new Game()
   })
   afterEach(async () => {
-    await game.stop()
+    await game.stopGame()
   })
   it('should have pending as status after creating', () => {
     expect(game.status).toBe(GameStatuses.pending)
   })
   it('should have in_progress as status after creating', async () => {
-    await game.start()
+    await game.startGame()
     expect(game.status).toBe(GameStatuses.in_progress)
   })
-  it('google should be in the Grid after start', async () => {
-    await game.start()
+  it('google should be in the Grid after startGame', async () => {
+    await game.startGame()
     expect(game.googlePosition.x).toBeLessThan(game.gridSize.columnCount)
     expect(game.googlePosition.x).toBeGreaterThanOrEqual(1)
     expect(game.googlePosition.y).toBeLessThan(game.gridSize.rowCount)
@@ -26,7 +26,7 @@ describe('Game test', () => {
   })
   it('google should be in the Grid but in new position after jump', async () => {
     game.googleJumpInterval = 10
-    await game.start()
+    await game.startGame()
     const prevGooglePosition = game.googlePosition
     await delay(1000)
     const currentGooglePosition = game.googlePosition
@@ -41,7 +41,7 @@ describe('Game test', () => {
         },
       }
 
-      await game.start()
+      await game.startGame()
 
       expect([1, 2]).toContain(game.player1.position.x)
       expect([1, 2, 3]).toContain(game.player1.position.y)
@@ -70,7 +70,7 @@ describe('Game test', () => {
       googleJumpInterval: 100,
     }
 
-    await game.start()
+    await game.startGame()
 
     const prevPositions = game.google.googlePosition.clone()
 
@@ -89,7 +89,7 @@ describe('Game test', () => {
         },
       }
 
-      await game.start()
+      await game.startGame()
       // p1 p2 g | p1 g p2 | p2 p1 g | p2 g p1 | g p1 p2 | g p2 p1
       const deltaForPlayer1 = game.google.position.x - game.player1.position.x
 
@@ -124,7 +124,7 @@ describe('Game test', () => {
         },
       }
 
-      await game.start()
+      await game.startGame()
 
       // p1   p1   p2   p2    g    g
       // p2    g   p1    g   p1   p2
@@ -164,7 +164,7 @@ describe('Game test', () => {
       2: { points: 0 },
     }
 
-    await game.start()
+    await game.startGame()
     // p1 p2 g | p1 g p2 | p2 p1 g | p2 g p1 | g p1 p2 | g p2 p1
     const deltaForPlayer1 = game.google.position.x - game.player1.position.x
 
