@@ -68,7 +68,7 @@ export class Game {
     }
 
     changeGridSize(columnCount, rowCount) {
-        if (this.#status === GameStatuses.in_progress) return
+        if (this.#status !== GameStatuses.pending) return
 
         this.#settings.gridSize.columnCount = columnCount
         this.#settings.gridSize.rowCount = rowCount
@@ -76,14 +76,14 @@ export class Game {
     }
 
     changePointsToWin(pointsToWin) {
-        if (this.#status === GameStatuses.in_progress) return
+        if (this.#status !== GameStatuses.pending) return
 
         this.#settings.pointsToWin = pointsToWin
         this.#callbackProps.onChange()
     }
 
     changeGoogleJumpInterval(googleJumpInterval) {
-        if (this.#status === GameStatuses.in_progress) return
+        if (this.#status !== GameStatuses.pending) return
 
         this.#settings.googleJumpInterval = googleJumpInterval
         this.#callbackProps.onChange()
@@ -138,10 +138,6 @@ export class Game {
         return this.#score
     }
 
-    set score(value) {
-        this.#score = value
-    }
-
     //Запуск игры
     start() {
         if (this.#status !== GameStatuses.pending) return
@@ -189,6 +185,7 @@ export class Game {
     #runGoogleJumpInterval() {
         if (this.#status !== GameStatuses.in_progress) return
         if (this.#settings.googleJumpInterval === 0) return
+        clearInterval(this.#googleSetIntervalId)
         this.#googleSetIntervalId = setInterval(() => {
             this.#score.google.jumps++
             this.#moveGoogleToRandomPosition()
@@ -198,46 +195,46 @@ export class Game {
     //Управление игроками
     movePlayer1Right() {
         const delta = {x: 1}
-        this.movePlayer(this.#player1, this.#player2, delta)
+        this.#movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer1Left() {
         const delta = {x: -1}
-        this.movePlayer(this.#player1, this.#player2, delta)
+        this.#movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer1Up() {
         const delta = {y: -1}
-        this.movePlayer(this.#player1, this.#player2, delta)
+        this.#movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer1Down() {
         const delta = {y: 1}
-        this.movePlayer(this.#player1, this.#player2, delta)
+        this.#movePlayer(this.#player1, this.#player2, delta)
     }
 
     movePlayer2Right() {
         const delta = {x: 1}
-        this.movePlayer(this.#player2, this.#player1, delta)
+        this.#movePlayer(this.#player2, this.#player1, delta)
     }
 
     movePlayer2Left() {
         const delta = {x: -1}
-        this.movePlayer(this.#player2, this.#player1, delta)
+        this.#movePlayer(this.#player2, this.#player1, delta)
     }
 
     movePlayer2Up() {
         const delta = {y: -1}
-        this.movePlayer(this.#player2, this.#player1, delta)
+        this.#movePlayer(this.#player2, this.#player1, delta)
     }
 
     movePlayer2Down() {
         const delta = {y: 1}
-        this.movePlayer(this.#player2, this.#player1, delta)
+        this.#movePlayer(this.#player2, this.#player1, delta)
     }
 
     // Общая логика движения
-    movePlayer(movingPlayer, anotherPlayer, delta) {
+    #movePlayer(movingPlayer, anotherPlayer, delta) {
         if (this.#status !== GameStatuses.in_progress) return
 
         // стоп таймер на время хода
@@ -264,8 +261,8 @@ export class Game {
     //Проверки
     #checkBorders(player, delta) {
         const newPosition = player.position.clone()
-        if (delta.x) newPosition.x += delta.x
-        if (delta.y) newPosition.y += delta.y
+        if (delta.x !== undefined) newPosition.x += delta.x
+        if (delta.y !== undefined) newPosition.y += delta.y
 
         if (newPosition.x < 0 || newPosition.x >= this.#settings.gridSize.columnCount) {
             return true
@@ -279,8 +276,8 @@ export class Game {
 
     #checkOtherPlayer(movingPlayer, anotherPlayer, delta) {
         const newPosition = movingPlayer.position.clone()
-        if (delta.x) newPosition.x += delta.x
-        if (delta.y) newPosition.y += delta.y
+        if (delta.x !== undefined) newPosition.x += delta.x
+        if (delta.y !== undefined) newPosition.y += delta.y
 
         return anotherPlayer.position.equal(newPosition)
     }
@@ -293,7 +290,7 @@ export class Game {
         this.#score[player.id].points += 1
 
         if (this.#score[player.id].points === this.#settings.pointsToWin) {
-            this.#finishGame()
+            this.finishGame()
         } else {
             this.#moveGoogleToRandomPosition()
         }
@@ -301,12 +298,21 @@ export class Game {
 
     //Остановка игры
     stop() {
+        if (this.#status !== GameStatuses.in_progress) return
         clearInterval(this.#googleSetIntervalId)
-        this.#status = GameStatuses.stoped
+        this.#status = GameStatuses.paused
+        this.#callbackProps.onChange()
+    }
+
+    resume() {
+        if (this.#status !== GameStatuses.paused) return
+        this.#status = GameStatuses.in_progress
+        this.#runGoogleJumpInterval()
+        this.#callbackProps.onChange()
     }
 
     //Завершение игры
-    #finishGame() {
+    finishGame() {
         clearInterval(this.#googleSetIntervalId)
         this.#status = GameStatuses.finished
         this.#callbackProps.onChange()
