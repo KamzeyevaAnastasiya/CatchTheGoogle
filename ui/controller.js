@@ -78,15 +78,15 @@ export class Controller {
     }
 
     #startGame() {
-        this.model.start()
+        this.model.startGame()
     }
 
     #stopGame() {
-        this.model.stop()
+        this.model.stopGame()
     }
 
     #resumeGame() {
-        this.model.resume()
+        this.model.resumeGame()
     }
 
     #finishGame() {
