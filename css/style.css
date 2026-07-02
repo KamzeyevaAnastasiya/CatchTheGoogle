@@ -23,6 +23,7 @@ body {
 .wrapperSettingsGame {
     display: flex;
     justify-content: center;
+    align-items: end;
     gap: 12px;
 }
 
@@ -52,6 +53,27 @@ body {
 
 .select:disabled {
     cursor: not-allowed;
+}
+
+.stopButton {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #884e0c;
+    border: 2px solid #673905;
+    border-radius: 2px;
+    box-sizing: border-box;
+    box-shadow: 0 -4px 10px 2px rgba(202, 119, 25, 0.15), 0 4px 10px 2px rgba(202, 119, 25, 0.15);
+    cursor: pointer;
+}
+
+.stopButton img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }
 
 .startScreen {

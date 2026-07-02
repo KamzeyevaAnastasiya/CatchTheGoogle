@@ -13,6 +13,9 @@ export class Controller {
             onStart: () => {
                 this.#startGame()
             },
+            onStop: () => {
+                this.#stopGame()
+            },
             onMove: (playerNumber, direction) => {
                 if (playerNumber === 1) {
                     if (direction === MoveDirections.UP) this.model.movePlayer1Up()
@@ -42,6 +45,9 @@ export class Controller {
 
     #startGame() {
         this.model.start()
+    }
+    #stopGame() {
+        this.model.stop()
     }
 
     #changeGridSize(columnCount, rowCount) {

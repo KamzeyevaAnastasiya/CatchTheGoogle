@@ -102,6 +102,7 @@ export class View {
         wrapper.append(this.#settingsGridSize(dto))
         wrapper.append(this.#settingsPointsToWin(dto))
         wrapper.append(this.#settingsGoogleJumpInterval(dto))
+        wrapper.append(this.#stopGame())
         return wrapper
     }
 
@@ -180,6 +181,21 @@ export class View {
                 this.#callbacks.onChangeGoogleJumpInterval(option.googleJumpInterval)
             },
         })
+    }
+
+    #stopGame() {
+        const stopButtonElement = document.createElement('button')
+        stopButtonElement.className = 'stopButton'
+
+        const imgElement = document.createElement('img')
+        imgElement.src = '../img/icons/stopIcon.svg'
+        imgElement.alt = 'Stop game'
+        stopButtonElement.appendChild(imgElement)
+        stopButtonElement.addEventListener('click', () => {
+            this.#callbacks.onStop()
+            console.log('stop')
+        })
+        return stopButtonElement
     }
 
     #info() {
