@@ -46,54 +46,36 @@ export class View {
         }
     }
 
-    #score(dto) {
-        const score = document.createElement('div')
-        score.className = 'score'
-        score.innerHTML = ''
+    #gridScreen(dto) {
+        const tableElement = document.createElement('table')
 
-        const scorePlayer1 = document.createElement('div')
-        const player1 = '../img/icons/man01.svg'
-        scorePlayer1.innerHTML = `Player 1: <img src="${player1}" alt="Player 1" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[1].points}`
-
-        const scorePlayer2 = document.createElement('div')
-        const player2 = '../img/icons/man02.svg'
-        scorePlayer2.innerHTML = `Player 2: <img src="${player2}" alt="Player 2" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[2].points}`
-
-        const scoreGoogle = document.createElement('div')
-        const google = '../img/icons/googleIcon.svg'
-        scoreGoogle.innerHTML = `Google: <img src="${google}" alt="Google" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score.google.jumps}`
-
-        score.appendChild(scorePlayer1)
-        score.appendChild(scorePlayer2)
-        score.appendChild(scoreGoogle)
-
-        return score
-    }
-
-    #info() {
-        const dialog = document.createElement('dialog')
-        dialog.className = 'info'
-        const text = document.createElement('p')
-        text.textContent = 'Control is done with “arrows for player 1” and “WASD for player 2”'
-        const button = document.createElement('button')
-        button.textContent = 'OK'
-        button.addEventListener('click', () => {
-            dialog.close()
-            dialog.remove()
-            this.#infoDialog = null
-        })
-        dialog.append(text, button)
-        return dialog
-    }
-
-    #showInfoDialog() {
-        if (this.#infoDialog) {
-            this.#infoDialog.remove()
+        for (let y = 0; y < dto.gridSize.rowCount; y++) {
+            const rowElement = document.createElement('tr')
+            for (let x = 0; x < dto.gridSize.columnCount; x++) {
+                const cellElement = document.createElement('td')
+                if (dto.googlePosition && x === dto.googlePosition.x && y === dto.googlePosition.y) {
+                    const googleElement = document.createElement('img')
+                    googleElement.src = '../img/icons/googleIcon.svg'
+                    googleElement.alt = 'Google'
+                    cellElement.appendChild(googleElement)
+                }
+                if (dto.googlePosition && x === dto.player1Position.x && y === dto.player1Position.y) {
+                    const player1 = document.createElement('img')
+                    player1.src = '../img/icons/man01.svg'
+                    player1.alt = 'Player1'
+                    cellElement.appendChild(player1)
+                }
+                if (dto.player2Position && x === dto.player2Position.x && y === dto.player2Position.y) {
+                    const player2 = document.createElement('img')
+                    player2.src = '../img/icons/man02.svg'
+                    player2.alt = 'Player2'
+                    cellElement.appendChild(player2)
+                }
+                rowElement.append(cellElement)
+            }
+            tableElement.append(rowElement)
         }
-
-        this.#infoDialog = this.#info()
-        document.body.append(this.#infoDialog)
-        this.#infoDialog.showModal()
+        return tableElement
     }
 
     #settingsScreen() {
@@ -200,35 +182,54 @@ export class View {
         })
     }
 
-    #gridScreen(dto) {
-        const tableElement = document.createElement('table')
-
-        for (let y = 0; y < dto.gridSize.rowCount; y++) {
-            const rowElement = document.createElement('tr')
-            for (let x = 0; x < dto.gridSize.columnCount; x++) {
-                const cellElement = document.createElement('td')
-                if (dto.googlePosition && x === dto.googlePosition.x && y === dto.googlePosition.y) {
-                    const googleElement = document.createElement('img')
-                    googleElement.src = '../img/icons/googleIcon.svg'
-                    googleElement.alt = 'Google'
-                    cellElement.appendChild(googleElement)
-                }
-                if (dto.googlePosition && x === dto.player1Position.x && y === dto.player1Position.y) {
-                    const player1 = document.createElement('img')
-                    player1.src = '../img/icons/man01.svg'
-                    player1.alt = 'Player1'
-                    cellElement.appendChild(player1)
-                }
-                if (dto.player2Position && x === dto.player2Position.x && y === dto.player2Position.y) {
-                    const player2 = document.createElement('img')
-                    player2.src = '../img/icons/man02.svg'
-                    player2.alt = 'Player2'
-                    cellElement.appendChild(player2)
-                }
-                rowElement.append(cellElement)
-            }
-            tableElement.append(rowElement)
-        }
-        return tableElement
+    #info() {
+        const dialog = document.createElement('dialog')
+        dialog.className = 'info'
+        const text = document.createElement('p')
+        text.textContent = 'Control is done with “arrows for player 1” and “WASD for player 2”'
+        const button = document.createElement('button')
+        button.textContent = 'OK'
+        button.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+            this.#infoDialog = null
+        })
+        dialog.append(text, button)
+        return dialog
     }
+
+    #showInfoDialog() {
+        if (this.#infoDialog) {
+            this.#infoDialog.remove()
+        }
+
+        this.#infoDialog = this.#info()
+        document.body.append(this.#infoDialog)
+        this.#infoDialog.showModal()
+    }
+
+    #score(dto) {
+        const score = document.createElement('div')
+        score.className = 'score'
+        score.innerHTML = ''
+
+        const scorePlayer1 = document.createElement('div')
+        const player1 = '../img/icons/man01.svg'
+        scorePlayer1.innerHTML = `Player 1: <img src="${player1}" alt="Player 1" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[1].points}`
+
+        const scorePlayer2 = document.createElement('div')
+        const player2 = '../img/icons/man02.svg'
+        scorePlayer2.innerHTML = `Player 2: <img src="${player2}" alt="Player 2" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[2].points}`
+
+        const scoreGoogle = document.createElement('div')
+        const google = '../img/icons/googleIcon.svg'
+        scoreGoogle.innerHTML = `Google: <img src="${google}" alt="Google" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score.google.jumps}`
+
+        score.appendChild(scorePlayer1)
+        score.appendChild(scorePlayer2)
+        score.appendChild(scoreGoogle)
+
+        return score
+    }
+
 }
