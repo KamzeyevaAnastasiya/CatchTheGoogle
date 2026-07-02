@@ -210,7 +210,7 @@ export class View {
 
     #stopGameDialog() {
         const dialog = document.createElement('dialog')
-        dialog.className = 'dialogStopGame'
+        dialog.className = 'stopGameDialog'
 
         const text = document.createElement('p')
         text.textContent = 'GAME PAUSED'
@@ -246,7 +246,7 @@ export class View {
 
     #infoGameDialog() {
         const dialog = document.createElement('dialog')
-        dialog.className = 'info'
+        dialog.className = 'infoGameDialog'
 
         const text = document.createElement('p')
         text.textContent = 'Control is done with “arrows for player 1” and “WASD for player 2”'
