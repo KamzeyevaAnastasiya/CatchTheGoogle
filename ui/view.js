@@ -1,10 +1,10 @@
 import {GameStatuses} from '../core/game/gameStatuses.js'
 import {MoveDirections} from '../core/moveDirections.js'
-import {Google} from "../core/unit.js";
 
 export class View {
     #callbacks = {}
     #infoDialog = null
+    #stopDialog = null
 
     #keyBindings = {
         ArrowUp: {player: 1, direction: MoveDirections.UP},
@@ -26,7 +26,7 @@ export class View {
     #handleKeyUp = (e) => {
         const binding = this.#keyBindings[e.code]
         if (!binding) return
-        this.#callbacks.onMove(binding.player, binding.direction)
+        this.#callbacks.onMove?.(binding.player, binding.direction)
     }
 
     setCallbacks(callbacksProps) {
@@ -40,9 +40,14 @@ export class View {
 
         if (dto.status === GameStatuses.pending) {
             this.rootElement.append(this.#settingsScreen())
-        } else if (dto.status === GameStatuses.in_progress) {
+            return
+        }
+        if (dto.status === GameStatuses.in_progress || dto.status === GameStatuses.paused) {
             this.rootElement.append(this.#score(dto))
             this.rootElement.append(this.#gridScreen(dto))
+        }
+        if (dto.status === GameStatuses.paused) {
+            this.#showStopDialog()
         }
     }
 
@@ -59,7 +64,7 @@ export class View {
                     googleElement.alt = 'Google'
                     cellElement.appendChild(googleElement)
                 }
-                if (dto.googlePosition && x === dto.player1Position.x && y === dto.player1Position.y) {
+                if (dto.player1Position && x === dto.player1Position.x && y === dto.player1Position.y) {
                     const player1 = document.createElement('img')
                     player1.src = '../img/icons/man01.svg'
                     player1.alt = 'Player1'
@@ -88,7 +93,7 @@ export class View {
 
         //subject, publisher; subscribe, on, handle; observer, subscriber, handler
         startButtonElement.addEventListener('click', () => {
-            this.#callbacks.onStart()
+            this.#callbacks.onStart?.()
             this.#showInfoDialog()
         })
 
@@ -102,7 +107,9 @@ export class View {
         wrapper.append(this.#settingsGridSize(dto))
         wrapper.append(this.#settingsPointsToWin(dto))
         wrapper.append(this.#settingsGoogleJumpInterval(dto))
-        wrapper.append(this.#stopGame())
+        if (dto.status === GameStatuses.in_progress) {
+            wrapper.append(this.#stopGame())
+        }
         return wrapper
     }
 
@@ -192,10 +199,42 @@ export class View {
         imgElement.alt = 'Stop game'
         stopButtonElement.appendChild(imgElement)
         stopButtonElement.addEventListener('click', () => {
-            this.#callbacks.onStop()
-            console.log('stop')
+            this.#callbacks.onStop?.()
         })
         return stopButtonElement
+    }
+
+    #dialogStopGame() {
+        const dialog = document.createElement('dialog')
+        dialog.className = 'dialogStopGame'
+        const text = document.createElement('p')
+        text.textContent = 'GAME PAUSED'
+        const quitButton = document.createElement('button')
+        quitButton.textContent = 'QUIT'
+        quitButton.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+            this.#stopDialog = null
+            this.#callbacks.onFinish?.()
+        })
+        const resumeButton = document.createElement('button')
+        resumeButton.textContent = 'RESUME'
+        resumeButton.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+            this.#stopDialog = null
+            this.#callbacks.onResume?.()
+        })
+        dialog.append(text, quitButton, resumeButton)
+        return dialog
+    }
+
+    #showStopDialog() {
+        if (this.#stopDialog) return
+
+        this.#stopDialog = this.#dialogStopGame()
+        document.body.append(this.#stopDialog)
+        this.#stopDialog.showModal()
     }
 
     #info() {
