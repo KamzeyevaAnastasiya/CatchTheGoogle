@@ -139,7 +139,7 @@ export class Game {
     }
 
     //Запуск игры
-    start() {
+    startGame() {
         if (this.#status !== GameStatuses.pending) return
 
         this.#status = GameStatuses.in_progress
@@ -297,14 +297,14 @@ export class Game {
     }
 
     //Остановка игры
-    stop() {
+    stopGame() {
         if (this.#status !== GameStatuses.in_progress) return
         clearInterval(this.#googleSetIntervalId)
         this.#status = GameStatuses.paused
         this.#callbackProps.onChange()
     }
 
-    resume() {
+    resumeGame() {
         if (this.#status !== GameStatuses.paused) return
         this.#status = GameStatuses.in_progress
         this.#runGoogleJumpInterval()
