@@ -86,24 +86,14 @@ body {
     transform: translateY(0);
 }
 
-table {
-    margin: 0 auto;
-    background: rgba(110, 117, 102, 0.3);
-    border-collapse: collapse;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    border-radius: 15px;
-    overflow: hidden;
-}
-
 table td {
-    border: 2px solid #333;
+    background: rgba(110, 117, 102, 0.3);
+    border: 2px solid #999b95;
     border-radius: 5px;
     padding: 6px 12px;
     width: 80px;
     height: 80px;
     text-align: center;
-    vertical-align: middle;
-    background: #f8f9fa;
     transition: all 0.2s ease;
 }
 
