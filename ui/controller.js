@@ -62,6 +62,7 @@ export class Controller {
             pointsToWinSettings: this.model.pointsToWinSettings,
             googleJumpInterval: this.model.googleJumpInterval,
             googleJumpIntervalSettings: this.model.googleJumpIntervalSettings,
+            gameTime: this.model.gameTime,
         })
     }
 

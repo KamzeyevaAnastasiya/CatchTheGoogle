@@ -295,11 +295,31 @@ export class View {
         const google = '../img/icons/googleIcon.svg'
         scoreGoogle.innerHTML = `Google: <img src="${google}" alt="Google" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score.google.jumps}`
 
-        score.appendChild(scorePlayer1)
-        score.appendChild(scorePlayer2)
-        score.appendChild(scoreGoogle)
-
+        score.append(
+            scorePlayer1,
+            scorePlayer2,
+            scoreGoogle,
+            this.#showTimerGame(dto),
+        )
         return score
     }
+
+    #showTimerGame(dto) {
+        const timerElement = document.createElement('div')
+        timerElement.className = 'timeGame'
+
+        const textElement = document.createElement('span')
+        textElement.textContent = 'Time'
+
+        const timer = document.createElement('div')
+        timer.className = 'timer'
+        let minutes = String(Math.floor(dto.gameTime / 60)).padStart(2, '0')
+        let seconds = String(dto.gameTime % 60).padStart(2, '0')
+        timer.textContent = `${minutes}:${seconds}`
+
+        timerElement.append(textElement, timer)
+        return timerElement
+    }
+
 
 }

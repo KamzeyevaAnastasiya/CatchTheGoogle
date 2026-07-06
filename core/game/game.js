@@ -53,6 +53,9 @@ export class Game {
         google: {jumps: 0},
     }
 
+    #gameTimerIntervalId
+    #gameTime = 0
+
     //Конструктор
     constructor(callbackProps) {
         this.#callbackProps = callbackProps
@@ -138,13 +141,20 @@ export class Game {
         return this.#score
     }
 
+    get gameTime() {
+        return this.#gameTime
+    }
+
+
     //Запуск игры
     startGame() {
         if (this.#status !== GameStatuses.pending) return
 
         this.#status = GameStatuses.in_progress
         this.#createUnits()
+        this.#gameTime = 0
         this.#runGoogleJumpInterval()
+        this.#runGameTimer()
         this.#callbackProps.onChange()
     }
 
@@ -296,11 +306,22 @@ export class Game {
         }
     }
 
+    #runGameTimer() {
+        if (this.#status !== GameStatuses.in_progress) return
+        clearInterval(this.#gameTimerIntervalId)
+
+        this.#gameTimerIntervalId = setInterval(() => {
+            this.#gameTime++
+            this.#callbackProps.onChange()
+        }, 1000)
+    }
+
     //Остановка игры
     stopGame() {
         if (this.#status !== GameStatuses.in_progress) return
         clearInterval(this.#googleSetIntervalId)
         this.#status = GameStatuses.paused
+        clearInterval(this.#gameTimerIntervalId)
         this.#callbackProps.onChange()
     }
 
@@ -308,6 +329,7 @@ export class Game {
         if (this.#status !== GameStatuses.paused) return
         this.#status = GameStatuses.in_progress
         this.#runGoogleJumpInterval()
+        this.#runGameTimer()
         this.#callbackProps.onChange()
     }
 
@@ -315,6 +337,7 @@ export class Game {
     finishGame() {
         clearInterval(this.#googleSetIntervalId)
         this.#status = GameStatuses.finished
+        clearInterval(this.#gameTimerIntervalId)
         this.#callbackProps.onChange()
     }
 }
