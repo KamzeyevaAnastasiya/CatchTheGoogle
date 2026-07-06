@@ -172,7 +172,7 @@ img {
 }
 
 .stopGameDialog::backdrop {
-    background: rgba(0, 0, 0, .45);
+    background: rgba(0, 0, 0, .35);
     backdrop-filter: blur(3px);
 }
 
@@ -241,7 +241,7 @@ img {
 }
 
 .infoGameDialog::backdrop {
-    background: rgba(0, 0, 0, .45);
+    background: rgba(0, 0, 0, .35);
     backdrop-filter: blur(3px);
 }
 
@@ -258,5 +258,117 @@ img {
     font-weight: 500;
     font-size: 22px;
     color: #75fa4c;
+    text-align: center;
+}
+
+.finishGameDialog {
+    margin: auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
+}
+
+.finishGameDialog::backdrop {
+    background: rgba(0, 0, 0, .35);
+    backdrop-filter: blur(3px);
+}
+
+.finishCard {
+    position: relative;
+    width: 280px;
+    height: 498px;
+}
+
+.ellipseImage {
+    position: absolute;
+    left: 24.5%;
+    width: 144px;
+    height: auto;
+}
+
+.winImage {
+    position: absolute;
+    top: 5%;
+    left: 34%;
+    display: block;
+    width: 90px;
+    height: 95px;
+}
+
+.finishCardImage {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+}
+
+.winnerTitle {
+    position: absolute;
+    bottom: 272px;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 42px;
+    color: #fff;
+}
+
+.winnerName {
+    position: absolute;
+    bottom: 246px;
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+    font-size: 18px;
+    color: #fff;
+}
+
+.scoreWrapper {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 200px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.scoreText, .timeText {
+    position: static;
+    font-weight: 400;
+    font-size: 18px;
+    color: #fff;
+}
+
+.timeWrapper {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.scoreFinish, .time {
+    position: static;
+    font-weight: 500;
+    font-size: 24px;
+    text-align: right;
+    color: #fff;
+}
+
+.playAgainButton {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 -4px 10px 2px rgba(88, 191, 57, 0.25), 0 4px 10px 2px rgba(88, 191, 57, 0.25);
+    background: #58bf39;
+    border: 2px solid #75f94c;
+    border-radius: 10px 2px;
+    width: 190px;
+    height: 48px;
+    font-weight: 500;
+    font-size: 24px;
+    color: #fff;
     text-align: center;
 }

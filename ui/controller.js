@@ -63,6 +63,7 @@ export class Controller {
             googleJumpInterval: this.model.googleJumpInterval,
             googleJumpIntervalSettings: this.model.googleJumpIntervalSettings,
             gameTime: this.model.gameTime,
+            winnerPlayerId: this.model.winnerPlayerId
         })
     }
 

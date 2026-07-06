@@ -52,6 +52,7 @@ export class Game {
         2: {points: 0},
         google: {jumps: 0},
     }
+    #winnerPlayerId = null
 
     #gameTimerIntervalId
     #gameTime = 0
@@ -141,10 +142,22 @@ export class Game {
         return this.#score
     }
 
+    get winnerPlayerId() {
+        if (this.#status !== GameStatuses.finished) {
+            return null
+        }
+        if (this.#score[1].points > this.#score[2].points) {
+            return 1
+        } else if (this.#score[2].points > this.#score[1].points) {
+            return 2
+        }
+
+        return 1
+    }
+
     get gameTime() {
         return this.#gameTime
     }
-
 
     //Запуск игры
     startGame() {
@@ -336,8 +349,8 @@ export class Game {
     //Завершение игры
     finishGame() {
         clearInterval(this.#googleSetIntervalId)
-        this.#status = GameStatuses.finished
         clearInterval(this.#gameTimerIntervalId)
+        this.#status = GameStatuses.finished
         this.#callbackProps.onChange()
     }
 }

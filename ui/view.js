@@ -5,6 +5,7 @@ export class View {
     #callbacks = {}
     #infoDialog = null
     #stopDialog = null
+    #finishDialog = null
 
     #keyBindings = {
         ArrowUp: {player: 1, direction: MoveDirections.UP},
@@ -36,18 +37,26 @@ export class View {
     render(dto) {
         this.rootElement.innerHTML = ''
 
-        this.rootElement.append(this.#settingsGame(dto))
+        if (dto.status !== GameStatuses.finished) {
+            this.rootElement.append(this.#settingsGame(dto))
+        }
 
         if (dto.status === GameStatuses.pending) {
             this.rootElement.append(this.#settingsScreen())
             return
         }
+
         if (dto.status === GameStatuses.in_progress || dto.status === GameStatuses.paused) {
             this.rootElement.append(this.#score(dto))
             this.rootElement.append(this.#gridScreen(dto))
         }
+
         if (dto.status === GameStatuses.paused) {
             this.#showStopGameDialog()
+        }
+
+        if (dto.status === GameStatuses.finished) {
+            this.#showFinishGameDialog(dto)
         }
     }
 
@@ -321,5 +330,111 @@ export class View {
         return timerElement
     }
 
+    #finishGameDialog(dto) {
+        const dialog = document.createElement('dialog')
+        dialog.className = 'finishGameDialog'
+        dialog.append(this.#createFinishCard(dto, dialog))
+        return dialog
+    }
 
+    #showFinishGameDialog(dto) {
+        console.log(dto.winnerPlayerId, dto.score)
+        if (this.#finishDialog) return
+        this.#finishDialog = this.#finishGameDialog(dto)
+        document.body.append(this.#finishDialog)
+        this.#finishDialog.showModal()
+    }
+
+    #createFinishCard(dto, dialog) {
+        const finishCard = document.createElement('div')
+        finishCard.className = 'finishCard'
+
+        const ellipseImage = document.createElement('img')
+        ellipseImage.src = '../img/icons/ellipseIcon.svg'
+        ellipseImage.alt = 'ellipse'
+        ellipseImage.className = 'ellipseImage'
+
+        const winImage = document.createElement('img')
+        winImage.src = '../img/icons/winnerIcon.svg'
+        winImage.alt = 'You win'
+        winImage.className = 'winImage'
+
+        const image = document.createElement('img')
+        image.src = '../img/icons/t-ShirtIcon.svg'
+        image.alt = 'Results game'
+        image.className = 'finishCardImage'
+        finishCard.append(
+            ellipseImage,
+            winImage,
+            image,
+            this.#createWinnerTitle(),
+            this.#createWinnerName(dto),
+            this.#createWinnerScore(dto),
+            this.#createWinnerTime(dto),
+            this.#createPlayAgainButton(dialog)
+        )
+        return finishCard
+    }
+
+    #createWinnerTitle() {
+        const winnerTitle = document.createElement('p')
+        winnerTitle.className = 'winnerTitle'
+        winnerTitle.textContent = 'You Win!'
+        return winnerTitle
+    }
+
+    #createWinnerName(dto) {
+        const winnerName = document.createElement('p')
+        winnerName.className = 'winnerName'
+        winnerName.textContent = `Player ${dto.winnerPlayerId}`
+        return winnerName
+    }
+
+    #createWinnerScore(dto) {
+        const wrapperScore = document.createElement('div')
+        wrapperScore.className = 'scoreWrapper'
+
+        const scoreText = document.createElement('span')
+        scoreText.className = 'scoreText'
+        scoreText.textContent = 'Catch:'
+
+        const score = document.createElement('span')
+        score.className = 'scoreFinish'
+        score.textContent = dto.score[dto.winnerPlayerId].points
+
+        wrapperScore.append(scoreText, score)
+        return wrapperScore
+    }
+
+    #createWinnerTime(dto) {
+        const wrapperTime = document.createElement('div')
+        wrapperTime.className = 'timeWrapper'
+
+        const timeText = document.createElement('span')
+        timeText.className = 'timeText'
+        timeText.textContent = 'Time:'
+
+        const time = document.createElement('span')
+        time.className = 'time'
+        let minutes = Math.floor(dto.gameTime / 60)
+        let seconds = String(dto.gameTime % 60).padStart(2, '0')
+        time.textContent = `${minutes}m ${seconds}s`
+
+        wrapperTime.append(timeText, time)
+        return wrapperTime
+    }
+
+    #createPlayAgainButton(dialog) {
+        const playAgainButton = document.createElement('button')
+        playAgainButton.textContent = 'Play again'
+        playAgainButton.className = 'playAgainButton'
+
+        playAgainButton.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+            this.#finishDialog = null
+            this.#callbacks.onFinish?.()
+        })
+        return playAgainButton
+    }
 }
