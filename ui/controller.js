@@ -45,6 +45,9 @@ export class Controller {
             onFinish: () => {
                 this.#finishGame()
             },
+            onRestart: () => {
+                this.#restartGame()
+            },
         })
         this.#renderView()
     }
@@ -93,5 +96,9 @@ export class Controller {
 
     #finishGame() {
         this.model.finishGame()
+    }
+
+    #restartGame() {
+        this.model.restartGame()
     }
 }

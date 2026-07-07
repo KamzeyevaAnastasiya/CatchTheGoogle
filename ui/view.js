@@ -460,7 +460,8 @@ export class View {
             dialog.close()
             dialog.remove()
             this.#finishDialog = null
-            this.#callbacks.onFinish?.()
+            this.#callbacks.onRestart?.()
+            this.#showInfoDialog()
         })
         return playAgainButton
     }

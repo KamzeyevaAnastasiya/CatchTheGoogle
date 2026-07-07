@@ -52,7 +52,6 @@ export class Game {
         2: {points: 0},
         google: {jumps: 0},
     }
-    #winnerPlayerId = null
 
     #gameTimerIntervalId
     #gameTime = 0
@@ -203,7 +202,6 @@ export class Game {
         }
 
         this.#google = new Google(this.#getRandomPosition(notCrossedPosition))
-        this.#callbackProps.onChange()
     }
 
     // Запуск интервала прыжков Google
@@ -218,6 +216,7 @@ export class Game {
                 return
             }
             this.#moveGoogleToRandomPosition()
+            this.#callbackProps.onChange()
         }, this.#settings.googleJumpInterval)
     }
 
@@ -358,5 +357,23 @@ export class Game {
         clearInterval(this.#gameTimerIntervalId)
         this.#status = GameStatuses.finished
         this.#callbackProps.onChange()
+    }
+
+    restartGame() {
+        clearInterval(this.#googleSetIntervalId)
+        clearInterval(this.#gameTimerIntervalId)
+
+        this.#score = {
+            1: {points: 0},
+            2: {points: 0},
+            google: {jumps: 0},
+        }
+        this.#gameTime = 0
+        this.#player1 = null
+        this.#player2 = null
+        this.#google = null
+
+        this.#status = GameStatuses.pending
+        this.startGame()
     }
 }
