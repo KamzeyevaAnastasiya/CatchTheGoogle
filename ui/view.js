@@ -359,15 +359,23 @@ export class View {
         winImage.alt = 'You win'
         winImage.className = 'winImage'
 
+        const lossImage = document.createElement('img')
+        lossImage.src = '../img/icons/lossIcon.svg'
+        lossImage.alt = 'Google Win'
+        lossImage.className = 'winImage'
+
         const image = document.createElement('img')
         image.src = '../img/icons/t-ShirtIcon.svg'
         image.alt = 'Results game'
         image.className = 'finishCardImage'
+
+        const resultImage = dto.winnerPlayerId === 'Google' ? lossImage : winImage
+
         finishCard.append(
             ellipseImage,
-            winImage,
+            resultImage,
             image,
-            this.#createWinnerTitle(),
+            this.#createWinnerTitle(dto),
             this.#createWinnerName(dto),
             this.#createWinnerScore(dto),
             this.#createWinnerTime(dto),
@@ -376,10 +384,16 @@ export class View {
         return finishCard
     }
 
-    #createWinnerTitle() {
+    #createWinnerTitle(dto) {
         const winnerTitle = document.createElement('p')
         winnerTitle.className = 'winnerTitle'
-        winnerTitle.textContent = 'You Win!'
+        const title = {
+            1: 'You Win!',
+            2: 'You Win!',
+            Google: 'Google Win!',
+            Draw: 'Draw',
+        }
+        winnerTitle.textContent = title[dto.winnerPlayerId]
         return winnerTitle
     }
 
@@ -389,7 +403,7 @@ export class View {
         const names = {
             1: 'Player 1',
             2: 'Player 2',
-            Google: 'Google',
+            Google: 'You\'ll be lucky next time',
             Draw: 'Draw',
         }
         winnerName.textContent = names[dto.winnerPlayerId]
