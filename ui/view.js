@@ -386,7 +386,13 @@ export class View {
     #createWinnerName(dto) {
         const winnerName = document.createElement('p')
         winnerName.className = 'winnerName'
-        winnerName.textContent = `Player ${dto.winnerPlayerId}`
+        const names = {
+            1: 'Player 1',
+            2: 'Player 2',
+            Google: 'Google',
+            Draw: 'Draw',
+        }
+        winnerName.textContent = names[dto.winnerPlayerId]
         return winnerName
     }
 
@@ -400,7 +406,14 @@ export class View {
 
         const score = document.createElement('span')
         score.className = 'scoreFinish'
-        score.textContent = dto.score[dto.winnerPlayerId].points
+
+        const scores = {
+            1: dto.score[1].points,
+            2: dto.score[2].points,
+            Google: dto.score.google.jumps,
+            Draw: dto.score[1].points,
+        }
+        score.textContent = scores[dto.winnerPlayerId]
 
         wrapperScore.append(scoreText, score)
         return wrapperScore

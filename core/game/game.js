@@ -146,13 +146,15 @@ export class Game {
         if (this.#status !== GameStatuses.finished) {
             return null
         }
-        if (this.#score[1].points > this.#score[2].points) {
+        if (this.#score[1].points > this.#score[2].points && this.#score[1].points > this.#score.google.jumps) {
             return 1
-        } else if (this.#score[2].points > this.#score[1].points) {
+        } else if (this.#score[2].points > this.#score[1].points && this.#score[2].points > this.#score.google.jumps) {
             return 2
+        } else if (this.#score.google.jumps >= this.#settings.pointsToWin || this.#score.google.jumps > this.#score[2].points && this.#score.google.jumps > this.#score[1].points) {
+            return 'Google'
         }
 
-        return 1
+        return 'Draw'
     }
 
     get gameTime() {
@@ -211,6 +213,10 @@ export class Game {
         clearInterval(this.#googleSetIntervalId)
         this.#googleSetIntervalId = setInterval(() => {
             this.#score.google.jumps++
+            if (this.#score.google.jumps >= this.#settings.pointsToWin) {
+                this.finishGame()
+                return
+            }
             this.#moveGoogleToRandomPosition()
         }, this.#settings.googleJumpInterval)
     }
