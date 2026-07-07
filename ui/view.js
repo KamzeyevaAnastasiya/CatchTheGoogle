@@ -1,5 +1,5 @@
-import {GameStatuses} from '../core/game/gameStatuses.js'
-import {MoveDirections} from '../core/moveDirections.js'
+import {GameStatuses} from '../core/constants/gameStatuses.js'
+import {MoveDirections} from '../core/constants/moveDirections.js'
 
 export class View {
     #callbacks = {}
@@ -69,19 +69,19 @@ export class View {
                 const cellElement = document.createElement('td')
                 if (dto.googlePosition && x === dto.googlePosition.x && y === dto.googlePosition.y) {
                     const googleElement = document.createElement('img')
-                    googleElement.src = '../img/icons/googleIcon.svg'
+                    googleElement.src = '../assets/img/icons/googleIcon.svg'
                     googleElement.alt = 'Google'
                     cellElement.appendChild(googleElement)
                 }
                 if (dto.player1Position && x === dto.player1Position.x && y === dto.player1Position.y) {
                     const player1 = document.createElement('img')
-                    player1.src = '../img/icons/man01.svg'
+                    player1.src = '../assets/img/icons/man01.svg'
                     player1.alt = 'Player1'
                     cellElement.appendChild(player1)
                 }
                 if (dto.player2Position && x === dto.player2Position.x && y === dto.player2Position.y) {
                     const player2 = document.createElement('img')
-                    player2.src = '../img/icons/man02.svg'
+                    player2.src = '../assets/img/icons/man02.svg'
                     player2.alt = 'Player2'
                     cellElement.appendChild(player2)
                 }
@@ -206,7 +206,7 @@ export class View {
         const stopButtonElement = document.createElement('button')
         stopButtonElement.className = 'stopButton'
 
-        const stopIcon = '../img/icons/stopIcon.svg'
+        const stopIcon = '../assets/img/icons/stopIcon.svg'
         stopButtonElement.innerHTML = `<img src="${stopIcon}" alt="Stop game" style="width: 20px; height: 20px; vertical-align: middle">`
 
         stopButtonElement.addEventListener('click', () => {
@@ -226,7 +226,7 @@ export class View {
         wrapper.className = 'stopGameDialogWrapper'
 
         const quitButton = document.createElement('button')
-        const quitIcon = '../img/icons/quitIcon.svg'
+        const quitIcon = '../assets/img/icons/quitIcon.svg'
         quitButton.innerHTML = `<img src="${quitIcon}" alt="Quit game" style="width: 20px; height: 20px; vertical-align: middle"> QUIT`
         quitButton.className = 'quitButton'
         quitButton.addEventListener('click', () => {
@@ -237,7 +237,7 @@ export class View {
         })
 
         const resumeButton = document.createElement('button')
-        const resumeIcon = '../img/icons/resumeIcon.svg'
+        const resumeIcon = '../assets/img/icons/resumeIcon.svg'
         resumeButton.innerHTML = `<img src="${resumeIcon}" alt="Resume game" style="width: 20px; height: 20px; vertical-align: middle"> RESUME`
         resumeButton.className = 'resumeButton'
         resumeButton.addEventListener('click', () => {
@@ -293,15 +293,15 @@ export class View {
         score.innerHTML = ''
 
         const scorePlayer1 = document.createElement('div')
-        const player1 = '../img/icons/man01.svg'
+        const player1 = '../assets/img/icons/man01.svg'
         scorePlayer1.innerHTML = `Player 1: <img src="${player1}" alt="Player 1" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[1].points}`
 
         const scorePlayer2 = document.createElement('div')
-        const player2 = '../img/icons/man02.svg'
+        const player2 = '../assets/img/icons/man02.svg'
         scorePlayer2.innerHTML = `Player 2: <img src="${player2}" alt="Player 2" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score[2].points}`
 
         const scoreGoogle = document.createElement('div')
-        const google = '../img/icons/googleIcon.svg'
+        const google = '../assets/img/icons/googleIcon.svg'
         scoreGoogle.innerHTML = `Google: <img src="${google}" alt="Google" style="width: 48px; height: 48px; vertical-align: middle"> ${dto.score.google.jumps}`
 
         score.append(
@@ -350,22 +350,22 @@ export class View {
         finishCard.className = 'finishCard'
 
         const ellipseImage = document.createElement('img')
-        ellipseImage.src = '../img/icons/ellipseIcon.svg'
+        ellipseImage.src = '../assets/img/icons/ellipseIcon.svg'
         ellipseImage.alt = 'ellipse'
         ellipseImage.className = 'ellipseImage'
 
         const winImage = document.createElement('img')
-        winImage.src = '../img/icons/winnerIcon.svg'
+        winImage.src = '../assets/img/icons/winnerIcon.svg'
         winImage.alt = 'You win'
         winImage.className = 'winImage'
 
         const lossImage = document.createElement('img')
-        lossImage.src = '../img/icons/lossIcon.svg'
+        lossImage.src = '../assets/img/icons/lossIcon.svg'
         lossImage.alt = 'Google Win'
         lossImage.className = 'winImage'
 
         const image = document.createElement('img')
-        image.src = '../img/icons/t-ShirtIcon.svg'
+        image.src = '../assets/img/icons/t-ShirtIcon.svg'
         image.alt = 'Results game'
         image.className = 'finishCardImage'
 

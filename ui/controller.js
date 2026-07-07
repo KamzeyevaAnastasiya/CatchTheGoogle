@@ -1,5 +1,5 @@
 import {Game} from '../core/game/game.js'
-import {MoveDirections} from "../core/moveDirections.js";
+import {MoveDirections} from "../core/constants/moveDirections.js";
 
 export class Controller {
     constructor(view) {
