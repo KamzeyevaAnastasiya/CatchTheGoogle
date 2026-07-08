@@ -376,4 +376,28 @@ export class Game {
         this.#status = GameStatuses.pending
         this.startGame()
     }
+
+    async getSettings() {
+        return this.#settings
+    }
+
+    async getStatus() {
+        return this.#status
+    }
+
+    async getScore() {
+        return this.#score
+    }
+
+    async getPlayer1() {
+        return this.#player1
+    }
+
+    async getPlayer2() {
+        return this.#player2
+    }
+
+    async getGoogle() {
+        return this.#google
+    }
 }
