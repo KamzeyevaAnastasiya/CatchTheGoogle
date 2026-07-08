@@ -1,5 +1,14 @@
-import { Controller } from './ui/controller.js'
-import { View } from './ui/view.js'
+import {Game} from './core/game/game.js'
+import {Controller} from './ui/controller.js'
+import {View} from './ui/view.js'
 
 const view = new View()
-const controller = new Controller(view)
+
+let controller
+const model = new Game({
+    onChange: () => {
+        controller.render()
+    },
+})
+
+controller = new Controller(view, model)

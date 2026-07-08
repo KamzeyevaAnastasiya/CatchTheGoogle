@@ -1,14 +1,10 @@
-import {Game} from '../core/game/game.js'
 import {MoveDirections} from "../core/constants/moveDirections.js";
 
 export class Controller {
-    constructor(view) {
-        this.model = new Game({
-            onChange: () => {
-                this.#renderView()
-            },
-        })
+    constructor(view, model) {
         this.view = view
+        this.model = model
+
         this.view.setCallbacks({
             onChangeGridSize: (columnCount, rowCount) => {
                 this.#changeGridSize(columnCount, rowCount)
@@ -49,6 +45,10 @@ export class Controller {
                 this.#restartGame()
             },
         })
+        this.render()
+    }
+
+    render() {
         this.#renderView()
     }
 
