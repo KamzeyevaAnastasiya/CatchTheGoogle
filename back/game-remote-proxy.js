@@ -1,7 +1,7 @@
 import {Api} from './Api.js'
 
 export class GameRemoteProxy {
-    #onChange
+    #callbackProps = {}
 
     #state = {
         status: 'pending',
@@ -47,8 +47,8 @@ export class GameRemoteProxy {
 
     socket = null
 
-    constructor(onChange) {
-        this.#onChange = onChange
+    constructor(callbackProps) {
+        this.#callbackProps = callbackProps
 
         this.socket = new WebSocket('ws://localhost:8080');
 
@@ -174,7 +174,7 @@ export class GameRemoteProxy {
         await this.getPlayer2()
         await this.getGoogle()
 
-        this.#onChange()
+        this.#callbackProps.onChange()
     }
 
     async movePlayer1Right() {
