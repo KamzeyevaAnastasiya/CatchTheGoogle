@@ -13,7 +13,9 @@ const game = new Game({
         }
 
         for (const client of clients) {
-            client.send(JSON.stringify(message))
+            if (client.readyState === client.OPEN) {
+                client.send(JSON.stringify(message))
+            }
         }
     }
 })
@@ -32,7 +34,7 @@ wss.on('connection', (socket) => {
             }))
             return
         }
-        const result = await game[action.procedure]()
+        const result = await game[action.procedure](...Object.values(action.params || {}))
         const response = {
             procedure: action.procedure,
             result: result,

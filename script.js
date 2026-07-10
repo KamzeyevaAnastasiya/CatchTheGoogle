@@ -8,7 +8,7 @@ let controller
 
 const model = new GameRemoteProxy({
     onChange: () => {
-        controller.render()
+        controller?.render()
     },
 })
 
