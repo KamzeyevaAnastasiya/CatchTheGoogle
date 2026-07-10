@@ -49,10 +49,16 @@ export class GameRemoteProxy {
 
     constructor(callbackProps) {
         this.#callbackProps = callbackProps
+    }
 
+    async start() {
         this.socket = new WebSocket('ws://localhost:8080');
 
+        await new Promise((resolve) => {
+            this.socket.addEventListener('open', resolve, {once: true});
+        })
         this.api = new Api(this.socket)
+        await this.syncState()
     }
 
     async changeGridSize(columnCount, rowCount) {
