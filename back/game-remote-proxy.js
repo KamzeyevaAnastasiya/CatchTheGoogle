@@ -58,6 +58,10 @@ export class GameRemoteProxy {
             this.socket.addEventListener('open', resolve, {once: true});
         })
         this.api = new Api(this.socket)
+        this.api.onStateChanged = async () => {
+            console.log('STATE CHANGED')
+            await this.syncState()
+        }
         await this.syncState()
     }
 
