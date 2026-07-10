@@ -3,12 +3,22 @@ export class Api {
         this.socket = socket
 
         this.resolvers = {}
+        this.onStateChanged = null
 
         this.socket.addEventListener('message', (event) => {
-            const response = JSON.parse(event.data)
-            if (this.resolvers[response.procedure] && this.resolvers[response.procedure].length > 0) {
-                const resolve = this.resolvers[response.procedure].shift()
-                resolve(response.result)
+            const message = JSON.parse(event.data)
+            if (message.type === 'response') {
+                if (
+                    this.resolvers[message.procedure] &&
+                    this.resolvers[message.procedure].length > 0
+                ) {
+                    const resolve = this.resolvers[message.procedure].shift()
+                    resolve(message.result)
+                }
+            }
+
+            if (message.type === 'stateChanged') {
+                this.onStateChanged?.()
             }
         })
     }
