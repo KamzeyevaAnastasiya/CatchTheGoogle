@@ -408,4 +408,27 @@ export class Game {
     async getGameTime() {
         return this.gameTime
     }
+
+    async getState() {
+        return {
+            status: this.status,
+
+            gridSize: this.gridSize,
+            gridSizeSettings: this.gridSizeSettings,
+
+            pointsToWin: this.pointsToWin,
+            pointsToWinSettings: this.pointsToWinSettings,
+
+            googleJumpInterval: this.googleJumpInterval,
+            googleJumpIntervalSettings: this.googleJumpIntervalSettings,
+
+            player1: this.#player1,
+            player2: this.#player2,
+            google: this.google,
+
+            score: this.score,
+            winnerPlayerId: this.winnerPlayerId,
+            gameTime: this.gameTime,
+        }
+    }
 }

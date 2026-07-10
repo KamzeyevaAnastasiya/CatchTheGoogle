@@ -1,19 +1,28 @@
 import {WebSocketServer} from 'ws';
 import {Game} from '../core/game/game.js'
-import {EventEmitter} from 'events'
+
+const clients = new Set()
 
 const game = new Game({
-    onChange: () => {
-        console.log('Game changed')
+    onChange: async () => {
+        const state = await game.getState()
+
+        const message = {
+            type: 'stateChanged',
+            state,
+        }
+
+        for (const client of clients) {
+            client.send(JSON.stringify(message))
+        }
     }
 })
-
-game.startGame()
 
 const wss = new WebSocketServer({port: 8080});
 
 wss.on('connection', (socket) => {
     socket.on('error', console.error)
+    clients.add(socket)
 
     socket.on('message', async function message(data) {
         const action = JSON.parse(data)
@@ -30,5 +39,9 @@ wss.on('connection', (socket) => {
             type: 'response',
         }
         socket.send(JSON.stringify(response))
+    })
+
+    socket.on('close', () => {
+        clients.delete(socket)
     })
 })
