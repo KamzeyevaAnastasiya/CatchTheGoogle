@@ -400,4 +400,12 @@ export class Game {
     async getGoogle() {
         return this.#google
     }
+
+    async getWinnerPlayerId() {
+        return this.winnerPlayerId
+    }
+
+    async getGameTime() {
+        return this.gameTime
+    }
 }

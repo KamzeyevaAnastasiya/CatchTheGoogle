@@ -166,6 +166,16 @@ export class GameRemoteProxy {
         this.#state.googleJumpInterval = settings.googleJumpInterval
     }
 
+    async getWinnerPlayerId() {
+        this.#state.winnerPlayerId =
+            await this.api.send('getWinnerPlayerId')
+    }
+
+    async getGameTime() {
+        this.#state.gameTime =
+            await this.api.send('getGameTime')
+    }
+
     async syncState() {
         await this.getStatus()
         await this.getSettings()
@@ -173,6 +183,8 @@ export class GameRemoteProxy {
         await this.getPlayer1()
         await this.getPlayer2()
         await this.getGoogle()
+        await this.getWinnerPlayerId()
+        await this.getGameTime()
 
         this.#callbackProps.onChange()
     }
