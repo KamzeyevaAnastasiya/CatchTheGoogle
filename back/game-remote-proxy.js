@@ -57,11 +57,10 @@ export class GameRemoteProxy {
         await new Promise((resolve) => {
             this.socket.addEventListener('open', resolve, {once: true});
         })
-        this.api = new Api(this.socket)
-        this.api.onStateChanged = async () => {
-            console.log('STATE CHANGED')
-            await this.syncState()
-        }
+        this.api = new Api(this.socket, (state) => {
+            this.#state = state
+            this.#callbackProps.onChange()
+        })
         await this.syncState()
     }
 
@@ -70,21 +69,18 @@ export class GameRemoteProxy {
             columnCount,
             rowCount,
         })
-        await this.syncState()
     }
 
     async changePointsToWin(pointsToWin) {
         await this.api.send('changePointsToWin', {
             pointsToWin,
         })
-        await this.syncState()
     }
 
     async changeGoogleJumpInterval(googleJumpInterval) {
         await this.api.send('changeGoogleJumpInterval', {
             googleJumpInterval,
         })
-        await this.syncState()
     }
 
 
@@ -148,53 +144,8 @@ export class GameRemoteProxy {
         await this.api.send('startGame')
     }
 
-    async getScore() {
-        this.#state.score = await this.api.send('getScore')
-    }
-
-    async getStatus() {
-        this.#state.status = await this.api.send('getStatus')
-    }
-
-    async getPlayer1() {
-        this.#state.player1 = await this.api.send('getPlayer1')
-    }
-
-    async getPlayer2() {
-        this.#state.player2 = await this.api.send('getPlayer2')
-    }
-
-    async getGoogle() {
-        this.#state.google = await this.api.send('getGoogle')
-    }
-
-    async getSettings() {
-        const settings = await this.api.send('getSettings')
-        this.#state.gridSize = settings.gridSize
-        this.#state.pointsToWin = settings.pointsToWin
-        this.#state.googleJumpInterval = settings.googleJumpInterval
-    }
-
-    async getWinnerPlayerId() {
-        this.#state.winnerPlayerId =
-            await this.api.send('getWinnerPlayerId')
-    }
-
-    async getGameTime() {
-        this.#state.gameTime =
-            await this.api.send('getGameTime')
-    }
-
     async syncState() {
-        await this.getStatus()
-        await this.getSettings()
-        await this.getScore()
-        await this.getPlayer1()
-        await this.getPlayer2()
-        await this.getGoogle()
-        await this.getWinnerPlayerId()
-        await this.getGameTime()
-
+        this.#state = await this.api.send('getState')
         this.#callbackProps.onChange()
     }
 
