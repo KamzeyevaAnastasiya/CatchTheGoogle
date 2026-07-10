@@ -5,10 +5,13 @@ import {GameRemoteProxy} from "./back/game-remote-proxy.js";
 const view = new View()
 
 let controller
+
 const model = new GameRemoteProxy({
     onChange: () => {
         controller.render()
     },
 })
+
+await model.start()
 
 controller = new Controller(view, model)
