@@ -146,7 +146,6 @@ export class GameRemoteProxy {
 
     async startGame() {
         await this.api.send('startGame')
-        await this.syncState()
     }
 
     async getScore() {
@@ -201,63 +200,51 @@ export class GameRemoteProxy {
 
     async movePlayer1Right() {
         await this.api.send('movePlayer1Right')
-        await this.syncState()
     }
 
     async movePlayer1Left() {
         await this.api.send('movePlayer1Left')
-        await this.syncState()
     }
 
     async movePlayer1Up() {
         await this.api.send('movePlayer1Up')
-        await this.syncState()
     }
 
     async movePlayer1Down() {
         await this.api.send('movePlayer1Down')
-        await this.syncState()
     }
 
     async movePlayer2Right() {
         await this.api.send('movePlayer2Right')
-        await this.syncState()
     }
 
     async movePlayer2Left() {
         await this.api.send('movePlayer2Left')
-        await this.syncState()
     }
 
     async movePlayer2Up() {
         await this.api.send('movePlayer2Up')
-        await this.syncState()
     }
 
     async movePlayer2Down() {
         await this.api.send('movePlayer2Down')
-        await this.syncState()
     }
 
 
     async stopGame() {
         await this.api.send('stopGame')
-        await this.syncState()
     }
 
     async resumeGame() {
         await this.api.send('resumeGame')
-        await this.syncState()
     }
 
 
     async finishGame() {
         await this.api.send('finishGame')
-        await this.syncState()
     }
 
     async restartGame() {
         await this.api.send('restartGame')
-        await this.syncState()
     }
 }
