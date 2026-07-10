@@ -1,9 +1,8 @@
 export class Api {
-    constructor(socket) {
+    constructor(socket, onStateChanged) {
         this.socket = socket
-
+        this.onStateChanged = onStateChanged
         this.resolvers = {}
-        this.onStateChanged = null
 
         this.socket.addEventListener('message', (event) => {
             const message = JSON.parse(event.data)
@@ -15,11 +14,8 @@ export class Api {
                     const resolve = this.resolvers[message.procedure].shift()
                     resolve(message.result)
                 }
-            }
-
-            if (message.type === 'stateChanged') {
-                this.onStateChanged?.()
-            }
+            } else if (message.type === 'stateChanged') {
+                this.onStateChanged?.(message.state)            }
         })
     }
 
