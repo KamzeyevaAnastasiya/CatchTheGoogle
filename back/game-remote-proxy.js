@@ -157,4 +157,8 @@ export class GameRemoteProxy {
     async restartGame() {
         await this.api.send('restartGame')
     }
+
+    async backMainPage() {
+        await this.api.send('backMainPage')
+    }
 }

@@ -335,6 +335,21 @@ export class Game {
     }
 
     //Остановка игры
+    #resetGame() {
+        clearInterval(this.#googleSetIntervalId)
+        clearInterval(this.#gameTimerIntervalId)
+
+        this.#score = {
+            1: {points: 0},
+            2: {points: 0},
+            google: {jumps: 0},
+        }
+        this.#gameTime = 0
+        this.#player1 = null
+        this.#player2 = null
+        this.#google = null
+    }
+
     stopGame() {
         if (this.#status !== GameStatuses.in_progress) return
         clearInterval(this.#googleSetIntervalId)
@@ -360,21 +375,15 @@ export class Game {
     }
 
     restartGame() {
-        clearInterval(this.#googleSetIntervalId)
-        clearInterval(this.#gameTimerIntervalId)
-
-        this.#score = {
-            1: {points: 0},
-            2: {points: 0},
-            google: {jumps: 0},
-        }
-        this.#gameTime = 0
-        this.#player1 = null
-        this.#player2 = null
-        this.#google = null
-
+        this.#resetGame()
         this.#status = GameStatuses.pending
         this.startGame()
+    }
+
+    backMainPage() {
+        this.#resetGame()
+        this.#status = GameStatuses.pending
+        this.#callbackProps.onChange()
     }
 
     async getState() {

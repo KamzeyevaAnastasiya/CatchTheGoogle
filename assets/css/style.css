@@ -356,9 +356,10 @@ img {
     color: #fff;
 }
 
-.playAgainButton {
+.playAgainButton,
+.mainPageButton {
     position: absolute;
-    bottom: 36px;
+    bottom: 90px;
     left: 50%;
     transform: translateX(-50%);
     box-shadow: 0 -4px 10px 2px rgba(88, 191, 57, 0.25), 0 4px 10px 2px rgba(88, 191, 57, 0.25);
@@ -372,4 +373,8 @@ img {
     color: #fff;
     text-align: center;
     cursor: pointer;
+}
+
+.mainPageButton {
+    bottom: 32px;
 }

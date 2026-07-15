@@ -44,6 +44,9 @@ export class Controller {
             onRestart: () => {
                 this.#restartGame()
             },
+            onMainPage: () => {
+                this.#backMainPage()
+            },
         })
         this.render()
     }
@@ -100,5 +103,9 @@ export class Controller {
 
     #restartGame() {
         this.model.restartGame()
+    }
+
+    #backMainPage() {
+        this.model.backMainPage()
     }
 }

@@ -381,7 +381,8 @@ export class View {
             this.#createWinnerName(dto),
             this.#createWinnerScore(dto),
             this.#createWinnerTime(dto),
-            this.#createPlayAgainButton(dialog)
+            this.#createPlayAgainButton(dialog),
+            this.#createMainPageButton(dialog)
         )
         return finishCard
     }
@@ -466,5 +467,20 @@ export class View {
             this.#showInfoDialog()
         })
         return playAgainButton
+    }
+
+    #createMainPageButton(dialog) {
+        const mainPageButton = document.createElement('button')
+        mainPageButton.textContent = 'On main page'
+        mainPageButton.className = 'mainPageButton'
+
+        mainPageButton.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+            this.#finishDialog = null
+            this.#callbacks.onMainPage?.()
+
+        })
+        return mainPageButton
     }
 }
