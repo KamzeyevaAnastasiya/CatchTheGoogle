@@ -8,6 +8,7 @@ export class View {
     #infoDialog = null
     #stopDialog = null
     #finishDialog = null
+    #previousStatus = null
 
     #keyBindings = {
         ArrowUp: {player: 1, direction: MoveDirections.UP},
@@ -38,6 +39,14 @@ export class View {
 
     render(dto) {
         this.rootElement.innerHTML = ''
+
+        if (
+            this.#previousStatus === GameStatuses.pending &&
+            dto.status === GameStatuses.in_progress
+        ) {
+            this.#showInfoDialog()
+        }
+        this.#previousStatus = dto.status
 
         if (dto.status !== GameStatuses.finished) {
             this.rootElement.append(this.#settingsGame(dto))
@@ -105,7 +114,6 @@ export class View {
         //subject, publisher; subscribe, on, handle; observer, subscriber, handler
         startButtonElement.addEventListener('click', () => {
             this.#callbacks.onStart?.()
-            this.#showInfoDialog()
         })
 
         wrapper.append(startButtonElement)
