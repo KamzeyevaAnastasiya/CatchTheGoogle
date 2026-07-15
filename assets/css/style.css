@@ -102,6 +102,14 @@ body {
     transform: translateY(0);
 }
 
+.gridWrapper {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 table td {
     background: rgba(110, 117, 102, 0.3);
     border: 2px solid #999b95;

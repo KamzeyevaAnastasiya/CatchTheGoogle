@@ -72,6 +72,9 @@ export class View {
     }
 
     #gridScreen(dto) {
+        const wrapper = document.createElement('div')
+        wrapper.className = 'gridWrapper'
+
         const tableElement = document.createElement('table')
 
         for (let y = 0; y < dto.gridSize.rowCount; y++) {
@@ -100,7 +103,9 @@ export class View {
             }
             tableElement.append(rowElement)
         }
-        return tableElement
+
+        wrapper.append(tableElement)
+        return wrapper
     }
 
     #settingsScreen() {
