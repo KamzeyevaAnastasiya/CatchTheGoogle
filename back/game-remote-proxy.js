@@ -11,7 +11,13 @@ export class GameRemoteProxy {
     }
 
     async start() {
-        this.#socket = new WebSocket('ws://localhost:8080');
+        const WS_URL =
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1'
+                ? 'ws://localhost:8080'
+                : 'wss://your-project.onrender.com';
+
+        this.#socket = new WebSocket(WS_URL);
 
         await new Promise((resolve) => {
             this.#socket.addEventListener('open', resolve, {once: true});
