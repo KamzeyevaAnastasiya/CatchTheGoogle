@@ -1,5 +1,5 @@
 import { Game } from './game.js'
-import { GameStatuses } from '../constants/gameStatuses.js'
+import {GameStatuses} from "../constants/constants.js";
 
 let game
 

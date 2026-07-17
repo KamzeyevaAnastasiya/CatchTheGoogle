@@ -1,4 +1,4 @@
-import {MoveDirections} from "../core/constants/moveDirections.js";
+import {MoveDirections} from "../core/constants/constants.js";
 
 export class Controller {
     constructor(view, model) {

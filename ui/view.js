@@ -1,5 +1,4 @@
-import {GameStatuses} from '../core/constants/gameStatuses.js'
-import {MoveDirections} from '../core/constants/moveDirections.js'
+import {GameStatuses, MoveDirections} from "../core/constants/constants.js";
 
 const ICONS_PATH = 'assets/img/icons/'
 
