@@ -21,11 +21,8 @@ const game = new Game({
 })
 
 const PORT = process.env.PORT || 8080;
-
 const wss = new WebSocketServer({
-
     port: PORT,
-
 });
 
 wss.on('connection', (socket) => {
@@ -53,3 +50,11 @@ wss.on('connection', (socket) => {
         clients.delete(socket)
     })
 })
+
+wss.on('listening', () => {
+    console.log(`WebSocket server started on port ${PORT}`);
+});
+
+wss.on('error', (err) => {
+    console.error(err);
+});
