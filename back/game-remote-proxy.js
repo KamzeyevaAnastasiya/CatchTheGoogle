@@ -15,7 +15,7 @@ export class GameRemoteProxy {
             window.location.hostname === 'localhost' ||
             window.location.hostname === '127.0.0.1'
                 ? 'ws://localhost:8080'
-                : 'wss://your-project.onrender.com';
+                : 'wss://catchthegoogle-12yw.onrender.com';
 
         this.#socket = new WebSocket(WS_URL);
 
